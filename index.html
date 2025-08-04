@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KNOWN - Professional Web Intelligence</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #0a192f;
@@ -581,6 +582,55 @@
             border-left: 5px solid #2980b9;
         }
         
+        .chart-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            margin-bottom: 25px;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+        
+        .export-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .export-option {
+            padding: 12px 20px;
+            background: rgba(23, 42, 69, 0.7);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 12px;
+            color: var(--accent);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+        
+        .export-option:hover {
+            background: var(--accent);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+        
         /* Mobile responsiveness */
         @media (max-width: 1024px) {
             .main-container {
@@ -631,6 +681,10 @@
             
             .data-card {
                 padding: 20px;
+            }
+            
+            .export-options {
+                flex-direction: column;
             }
         }
         
@@ -774,6 +828,13 @@
             </div>
             
             <div class="data-display" id="dataDisplay" style="display: none;">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h2 class="section-title"><i class="fas fa-chart-bar"></i> Content Analysis</h2>
+                    </div>
+                    <canvas id="contentChart"></canvas>
+                </div>
+                
                 <div>
                     <h2 class="section-title"><i class="fas fa-chart-pie"></i> Analysis Results</h2>
                     <div class="data-grid">
@@ -831,7 +892,20 @@
                 <div>
                     <div class="raw-data-header">
                         <h2 class="section-title"><i class="fas fa-code"></i> Raw Data</h2>
-                        <button class="history-btn" id="exportCurrentBtn"><i class="fas fa-file-export"></i> Export Data</button>
+                        <div class="export-options">
+                            <div class="export-option" id="exportJson">
+                                <i class="fas fa-file-code"></i> Export JSON
+                            </div>
+                            <div class="export-option" id="exportCsv">
+                                <i class="fas fa-file-csv"></i> Export CSV
+                            </div>
+                            <div class="export-option" id="exportPdf">
+                                <i class="fas fa-file-pdf"></i> Export PDF
+                            </div>
+                            <div class="export-option" id="exportHtml">
+                                <i class="fas fa-file-alt"></i> Export HTML
+                            </div>
+                        </div>
                     </div>
                     <div class="raw-data-container">
                         <div class="raw-data-content" id="rawData">
@@ -899,7 +973,10 @@
         const helpBtn = document.getElementById('helpBtn');
         const clearHistoryBtn = document.getElementById('clearHistoryBtn');
         const exportAllBtn = document.getElementById('exportAllBtn');
-        const exportCurrentBtn = document.getElementById('exportCurrentBtn');
+        const exportJson = document.getElementById('exportJson');
+        const exportCsv = document.getElementById('exportCsv');
+        const exportPdf = document.getElementById('exportPdf');
+        const exportHtml = document.getElementById('exportHtml');
         const notification = document.getElementById('notification');
         const exportBadge = document.getElementById('exportBadge');
         
@@ -1034,41 +1111,188 @@
             
             // Display raw data
             rawData.textContent = JSON.stringify(data, null, 2);
+            
+            // Render content analysis chart
+            renderContentAnalysisChart(data);
         }
         
-        // Scrape website
-        function scrapeWebsite(url) {
+        // Render content analysis chart
+        function renderContentAnalysisChart(data) {
+            const ctx = document.getElementById('contentChart').getContext('2d');
+            
+            // Calculate content metrics
+            const wordCount = data.text ? data.text.split(/\s+/).length : 0;
+            const linkCount = data.links ? data.links.length : 0;
+            const scriptCount = data.scripts ? data.scripts.length : 0;
+            const styleCount = data.stylesheets ? data.stylesheets.length : 0;
+            const imageCount = data.images ? data.images.length : 0;
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Words', 'Links', 'Scripts', 'Styles', 'Images'],
+                    datasets: [{
+                        label: 'Content Elements',
+                        data: [wordCount, linkCount, scriptCount, styleCount, imageCount],
+                        backgroundColor: [
+                            'rgba(100, 255, 218, 0.7)',
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(241, 196, 15, 0.7)',
+                            'rgba(230, 126, 34, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(100, 255, 218, 1)',
+                            'rgba(52, 152, 219, 1)',
+                            'rgba(155, 89, 182, 1)',
+                            'rgba(241, 196, 15, 1)',
+                            'rgba(230, 126, 34, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Content Analysis',
+                            color: '#64ffda',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(204, 214, 246, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ccd6f6'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(204, 214, 246, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ccd6f6'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Scrape website with enhanced capabilities
+        async function scrapeWebsite(url) {
             statusText.textContent = `Scraping ${url}...`;
             
-            // Simulate scraping process
-            setTimeout(() => {
-                // Create mock data
+            try {
+                // Use our proprietary CORS bypass
+                const html = await fetchWithCorsBypass(url);
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // Extract meta information
+                const metaTags = doc.querySelectorAll('meta');
+                const meta = {
+                    description: '',
+                    keywords: '',
+                    charset: '',
+                    lang: doc.documentElement.lang || ''
+                };
+                
+                // Extract social media and open graph tags
+                const socialTags = {};
+                metaTags.forEach(tag => {
+                    const name = tag.getAttribute('name') || tag.getAttribute('property');
+                    const content = tag.getAttribute('content');
+                    
+                    if (name) {
+                        const lowerName = name.toLowerCase();
+                        if (lowerName.includes('description')) meta.description = content || '';
+                        if (lowerName.includes('keyword')) meta.keywords = content || '';
+                        if (lowerName.includes('charset')) meta.charset = content || '';
+                        
+                        // Capture social media tags
+                        if (lowerName.startsWith('og:') || lowerName.startsWith('twitter:')) {
+                            socialTags[name] = content;
+                        }
+                    }
+                });
+                
+                // Extract links
+                const links = [];
+                doc.querySelectorAll('a').forEach(link => {
+                    const href = link.href;
+                    if (href && href.startsWith('http')) {
+                        links.push(href);
+                    }
+                });
+                
+                // Extract text content (ignoring scripts and styles)
+                const text = doc.body.innerText || '';
+                
+                // Extract scripts
+                const scripts = [];
+                doc.querySelectorAll('script[src]').forEach(script => {
+                    scripts.push(script.src);
+                });
+                
+                // Extract stylesheets
+                const stylesheets = [];
+                doc.querySelectorAll('link[rel="stylesheet"][href]').forEach(link => {
+                    stylesheets.push(link.href);
+                });
+                
+                // Extract images
+                const images = [];
+                doc.querySelectorAll('img').forEach(img => {
+                    images.push({
+                        src: img.src,
+                        alt: img.alt || '',
+                        width: img.width,
+                        height: img.height
+                    });
+                });
+                
+                // Extract headings
+                const headings = {
+                    h1: [],
+                    h2: [],
+                    h3: [],
+                    h4: [],
+                    h5: [],
+                    h6: []
+                };
+                
+                for (let i = 1; i <= 6; i++) {
+                    doc.querySelectorAll(`h${i}`).forEach(heading => {
+                        headings[`h${i}`].push(heading.textContent);
+                    });
+                }
+                
+                // Create data object
                 const data = {
                     url,
                     timestamp: new Date().toISOString(),
-                    title: "Example Domain",
-                    meta: {
-                        description: "This domain is for use in illustrative examples in documents.",
-                        keywords: "example, test, domain",
-                        charset: "UTF-8",
-                        lang: "en"
-                    },
-                    links: [
-                        "https://www.iana.org/domains/example",
-                        "https://example.com/about",
-                        "https://example.com/contact",
-                        "https://example.com/privacy",
-                        "https://example.com/terms"
-                    ],
-                    text: "Example Domain This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission. More information can be found at the official website.",
-                    scripts: [
-                        "https://example.com/script.js",
-                        "https://example.com/analytics.js"
-                    ],
-                    stylesheets: [
-                        "https://example.com/style.css",
-                        "https://example.com/theme.css"
-                    ]
+                    title: doc.title || '',
+                    meta,
+                    socialTags,
+                    links: [...new Set(links)], // Remove duplicates
+                    text,
+                    scripts,
+                    stylesheets,
+                    images,
+                    headings,
+                    wordCount: text.split(/\s+/).length,
+                    linkCount: links.length
                 };
                 
                 // Save to database
@@ -1080,7 +1304,126 @@
                 displayScrapedData(data);
                 statusText.textContent = `Successfully scraped: ${url}`;
                 showNotification('Website scraped successfully!', 'success');
-            }, 1500);
+                
+            } catch (error) {
+                console.error('Scraping error:', error);
+                statusText.textContent = `Error scraping ${url}: ${error.message}`;
+                showNotification(`Scraping failed: ${error.message}`, 'error');
+            }
+        }
+        
+        // Enhanced CORS bypass with rotating proxies
+        async function fetchWithCorsBypass(url) {
+            const proxies = [
+                'https://api.allorigins.win/raw?url=',
+                'https://corsproxy.io/?',
+                'https://cors-anywhere.herokuapp.com/',
+                'https://thingproxy.freeboard.io/fetch/'
+            ];
+            
+            // Try each proxy until one works
+            for (const proxy of proxies) {
+                try {
+                    const response = await fetch(proxy + encodeURIComponent(url));
+                    
+                    if (!response.ok) {
+                        throw new Error(`Proxy error: ${response.status}`);
+                    }
+                    
+                    return await response.text();
+                } catch (error) {
+                    console.log(`Proxy ${proxy} failed, trying next...`);
+                }
+            }
+            
+            throw new Error('All CORS bypass methods failed');
+        }
+        
+        // Export data function
+        function exportData(format) {
+            if (!currentEntry) {
+                showNotification('No data to export', 'error');
+                return;
+            }
+            
+            let content, mimeType, fileName;
+            
+            switch(format) {
+                case 'json':
+                    content = JSON.stringify(currentEntry, null, 2);
+                    mimeType = 'application/json';
+                    fileName = `known_${currentEntry.url.replace(/[^a-z0-9]/gi, '_')}.json`;
+                    break;
+                case 'csv':
+                    // Simple CSV conversion
+                    let csv = 'Key,Value\n';
+                    csv += `URL,${currentEntry.url}\n`;
+                    csv += `Title,${currentEntry.title}\n`;
+                    csv += `Description,${currentEntry.meta.description}\n`;
+                    csv += `Word Count,${currentEntry.wordCount}\n`;
+                    csv += `Link Count,${currentEntry.linkCount}\n`;
+                    content = csv;
+                    mimeType = 'text/csv';
+                    fileName = `known_${currentEntry.url.replace(/[^a-z0-9]/gi, '_')}.csv`;
+                    break;
+                case 'html':
+                    // HTML report
+                    let html = `<!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>KNOWN Export - ${currentEntry.url}</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            h1 { color: #0a192f; }
+                            .section { margin-bottom: 30px; }
+                            .card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>KNOWN Web Intelligence Report</h1>
+                        <p><strong>URL:</strong> ${currentEntry.url}</p>
+                        <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
+                        
+                        <div class="section">
+                            <h2>Page Information</h2>
+                            <div class="card">
+                                <p><strong>Title:</strong> ${currentEntry.title || 'N/A'}</p>
+                                <p><strong>Description:</strong> ${currentEntry.meta.description || 'N/A'}</p>
+                                <p><strong>Keywords:</strong> ${currentEntry.meta.keywords || 'N/A'}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>Content Analysis</h2>
+                            <div class="card">
+                                <p><strong>Word Count:</strong> ${currentEntry.wordCount}</p>
+                                <p><strong>Link Count:</strong> ${currentEntry.linkCount}</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>`;
+                    content = html;
+                    mimeType = 'text/html';
+                    fileName = `known_${currentEntry.url.replace(/[^a-z0-9]/gi, '_')}.html`;
+                    break;
+                case 'pdf':
+                    showNotification('PDF export requires additional libraries', 'info');
+                    return;
+                default:
+                    showNotification('Invalid export format', 'error');
+                    return;
+            }
+            
+            // Create download link
+            const blob = new Blob([content], { type: mimeType });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification(`Exported as ${fileName}`, 'success');
         }
         
         // Clear history
@@ -1093,12 +1436,6 @@
                 dataDisplay.style.display = 'none';
                 showNotification('All data cleared', 'success');
             }
-        }
-        
-        // Export data function
-        function exportData() {
-            // In a real implementation, this would export the data
-            showNotification('Export functionality is enabled', 'info');
         }
         
         // Event listeners
@@ -1125,9 +1462,33 @@
             }
         });
         
-        exportBtn.addEventListener('click', exportData);
-        exportCurrentBtn.addEventListener('click', exportData);
-        exportAllBtn.addEventListener('click', exportData);
+        exportJson.addEventListener('click', () => exportData('json'));
+        exportCsv.addEventListener('click', () => exportData('csv'));
+        exportHtml.addEventListener('click', () => exportData('html'));
+        exportPdf.addEventListener('click', () => exportData('pdf'));
+        
+        exportBtn.addEventListener('click', () => {
+            if (!currentEntry) {
+                showNotification('No data to export', 'error');
+                return;
+            }
+            exportData('json');
+        });
+        
+        exportAllBtn.addEventListener('click', () => {
+            if (db.length === 0) {
+                showNotification('No data to export', 'error');
+                return;
+            }
+            const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `known_full_export_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showNotification('All data exported as JSON', 'success');
+        });
         
         clearHistoryBtn.addEventListener('click', clearHistory);
         
@@ -1157,7 +1518,16 @@
             ],
             text: "Example Domain This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.",
             scripts: ["https://example.com/script.js"],
-            stylesheets: ["https://example.com/style.css"]
+            stylesheets: ["https://example.com/style.css"],
+            images: [
+                {src: "https://example.com/logo.png", alt: "Example Logo", width: 200, height: 100}
+            ],
+            headings: {
+                h1: ["Example Domain"],
+                h2: ["Heading 1", "Heading 2"]
+            },
+            wordCount: 25,
+            linkCount: 3
         };
         
         if (db.length === 0) {

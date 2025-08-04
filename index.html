@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KNOWN - Web Intelligence</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary: #0a192f;
@@ -14,6 +15,7 @@
       --success: #2ecc71;
       --warning: #f39c12;
       --error: #e74c3c;
+      --card-bg: rgba(23, 42, 69, 0.7);
     }
     
     * {
@@ -24,21 +26,27 @@
     }
     
     body {
-      background-color: var(--primary);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
       color: var(--light);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      overflow-x: hidden;
     }
     
+    /* Header with glassmorphism effect */
     header {
-      background-color: var(--dark);
+      background: rgba(2, 12, 27, 0.8);
+      backdrop-filter: blur(10px);
       padding: 15px 20px;
       border-bottom: 1px solid rgba(100, 255, 218, 0.1);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
     
     .logo {
@@ -48,29 +56,28 @@
     }
     
     .logo-icon {
-      width: 30px;
-      height: 30px;
-      background: var(--accent);
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent) 0%, #52e0c4 100%);
       border-radius: 50%;
-      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
     }
     
-    .logo-icon::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 12px;
-      height: 12px;
-      background: var(--dark);
-      border-radius: 50%;
+    .logo-icon i {
+      color: var(--dark);
+      font-size: 18px;
     }
     
     .logo h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
+      font-size: 1.6rem;
+      font-weight: 700;
       letter-spacing: 1px;
+      background: linear-gradient(to right, var(--accent), #52e0c4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     
     .search-container {
@@ -82,17 +89,20 @@
     
     .search-container input {
       width: 100%;
-      padding: 10px 15px 10px 40px;
+      padding: 12px 15px 12px 45px;
       background: rgba(23, 42, 69, 0.7);
       border: 1px solid rgba(100, 255, 218, 0.2);
       border-radius: 30px;
       color: var(--light);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      backdrop-filter: blur(5px);
+      transition: all 0.3s;
     }
     
     .search-container input:focus {
       outline: none;
       border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(100, 255, 218, 0.2);
     }
     
     .search-icon {
@@ -101,32 +111,72 @@
       top: 50%;
       transform: translateY(-50%);
       color: var(--accent);
+      font-size: 1.1rem;
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .header-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(23, 42, 69, 0.7);
+      border: 1px solid rgba(100, 255, 218, 0.2);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .header-btn:hover {
+      background: var(--accent);
+      color: var(--dark);
+      transform: translateY(-2px);
     }
     
     .main-container {
       display: flex;
       flex: 1;
       overflow: hidden;
+      padding: 20px;
+      gap: 20px;
     }
     
     .sidebar {
-      width: 280px;
-      background-color: var(--dark);
+      width: 300px;
+      background: rgba(2, 12, 27, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
       padding: 20px;
-      border-right: 1px solid rgba(100, 255, 218, 0.1);
+      border: 1px solid rgba(100, 255, 218, 0.1);
       overflow-y: auto;
       display: flex;
       flex-direction: column;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
     
     .input-group {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid rgba(100, 255, 218, 0.1);
     }
     
     .input-group h2 {
-      font-size: 1.1rem;
-      margin-bottom: 10px;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
       color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .input-group h2 i {
+      font-size: 1.1rem;
     }
     
     .url-input {
@@ -136,58 +186,105 @@
     
     .url-input input {
       flex: 1;
-      padding: 10px 15px;
+      padding: 12px 15px;
       background: rgba(23, 42, 69, 0.7);
       border: 1px solid rgba(100, 255, 218, 0.2);
-      border-radius: 4px;
+      border-radius: 8px;
       color: var(--light);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      backdrop-filter: blur(5px);
+    }
+    
+    .url-input input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(100, 255, 218, 0.2);
     }
     
     .url-input button {
-      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent) 0%, #52e0c4 100%);
       color: var(--dark);
       border: none;
-      border-radius: 4px;
-      padding: 10px 15px;
+      border-radius: 8px;
+      padding: 0 20px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
     }
     
     .url-input button:hover {
-      background: #52e0c4;
       transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(100, 255, 218, 0.4);
     }
     
-    .history h2 {
-      font-size: 1.1rem;
+    .history {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 15px;
+    }
+    
+    .history-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .history-btn {
+      padding: 6px 10px;
+      background: rgba(23, 42, 69, 0.7);
+      border: 1px solid rgba(100, 255, 218, 0.2);
+      border-radius: 6px;
       color: var(--accent);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .history-btn:hover {
+      background: var(--accent);
+      color: var(--dark);
     }
     
     .history-list {
       list-style: none;
+      flex: 1;
+      overflow-y: auto;
     }
     
     .history-item {
-      padding: 12px;
+      padding: 15px;
       background: rgba(23, 42, 69, 0.3);
-      border-radius: 4px;
-      margin-bottom: 10px;
+      border-radius: 8px;
+      margin-bottom: 12px;
       cursor: pointer;
       transition: all 0.2s;
       border-left: 3px solid transparent;
+      backdrop-filter: blur(5px);
     }
     
     .history-item:hover {
       background: rgba(23, 42, 69, 0.5);
       border-left-color: var(--accent);
+      transform: translateX(5px);
     }
     
     .history-item.active {
       border-left-color: var(--accent);
       background: rgba(23, 42, 69, 0.7);
+      box-shadow: 0 0 15px rgba(100, 255, 218, 0.1);
     }
     
     .history-item .url {
@@ -196,69 +293,145 @@
       overflow: hidden;
       text-overflow: ellipsis;
       margin-bottom: 5px;
+      font-size: 0.95rem;
     }
     
     .history-item .date {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       color: rgba(204, 214, 246, 0.7);
     }
     
     .content {
       flex: 1;
-      padding: 20px;
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+    }
+    
+    .empty-state {
+      background: rgba(2, 12, 27, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 40px 20px;
+      color: rgba(204, 214, 246, 0.7);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(100, 255, 218, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      flex: 1;
+    }
+    
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      color: rgba(100, 255, 218, 0.3);
+    }
+    
+    .empty-state h2 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      color: var(--accent);
+    }
+    
+    .empty-state p {
+      max-width: 500px;
+      margin: 0 auto 25px;
+      line-height: 1.6;
+      font-size: 1.1rem;
+    }
+    
+    .pro-tips {
+      background: rgba(23, 42, 69, 0.5);
+      border-radius: 12px;
+      padding: 20px;
+      width: 100%;
+      max-width: 500px;
+    }
+    
+    .pro-tips h3 {
+      color: var(--accent);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .pro-tips ul {
+      text-align: left;
+      padding-left: 20px;
+    }
+    
+    .pro-tips li {
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    
+    .data-display {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex: 1;
     }
     
     .section-title {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       margin-bottom: 15px;
       padding-bottom: 10px;
       border-bottom: 1px solid rgba(100, 255, 218, 0.2);
       color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     
     .data-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
     }
     
     .data-card {
-      background: var(--secondary);
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 4px 12px rgba(2, 12, 27, 0.5);
-      transition: transform 0.3s;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s;
+      border: 1px solid rgba(100, 255, 218, 0.1);
     }
     
     .data-card:hover {
       transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      border-color: rgba(100, 255, 218, 0.3);
     }
     
     .data-card h3 {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 1rem;
-      margin-bottom: 10px;
+      gap: 10px;
+      font-size: 1.1rem;
+      margin-bottom: 15px;
       color: var(--accent);
     }
     
     .data-card h3 i {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
     }
     
     .data-content {
-      max-height: 200px;
+      max-height: 250px;
       overflow-y: auto;
-      font-size: 0.85rem;
-      line-height: 1.5;
+      font-size: 0.9rem;
+      line-height: 1.6;
       background: rgba(10, 25, 47, 0.5);
-      padding: 10px;
-      border-radius: 4px;
+      padding: 15px;
+      border-radius: 8px;
     }
     
     .data-content ul {
@@ -266,47 +439,75 @@
     }
     
     .data-content li {
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
     
     .data-content a {
       color: var(--accent);
       text-decoration: none;
+      transition: all 0.2s;
+      word-break: break-all;
     }
     
     .data-content a:hover {
       text-decoration: underline;
     }
     
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: rgba(204, 214, 246, 0.5);
+    .raw-data-container {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(100, 255, 218, 0.1);
     }
     
-    .empty-state i {
-      font-size: 3rem;
+    .raw-data-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 15px;
-      color: rgba(100, 255, 218, 0.3);
     }
     
-    .empty-state p {
-      max-width: 400px;
-      margin: 0 auto;
-      line-height: 1.6;
+    .raw-data-content {
+      max-height: 300px;
+      overflow-y: auto;
+      background: rgba(10, 25, 47, 0.5);
+      padding: 15px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
     
     .status-bar {
-      padding: 10px 15px;
-      background: var(--secondary);
-      border-radius: 4px;
-      font-size: 0.85rem;
+      padding: 12px 20px;
+      background: rgba(2, 12, 27, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      font-size: 0.9rem;
       display: flex;
       justify-content: space-between;
       margin-top: auto;
+      border: 1px solid rgba(100, 255, 218, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
     
-    /* Settings modal */
+    .cors-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .cors-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px var(--success);
+    }
+    
+    /* Export modal */
     .modal {
       display: none;
       position: fixed;
@@ -314,19 +515,21 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.8);
       z-index: 1000;
       align-items: center;
       justify-content: center;
+      backdrop-filter: blur(5px);
     }
     
     .modal-content {
-      background: var(--dark);
+      background: rgba(2, 12, 27, 0.95);
       width: 90%;
       max-width: 500px;
-      border-radius: 8px;
-      padding: 20px;
+      border-radius: 16px;
+      padding: 25px;
       border: 1px solid var(--accent);
+      box-shadow: 0 0 30px rgba(100, 255, 218, 0.3);
     }
     
     .modal-header {
@@ -334,87 +537,118 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(100, 255, 218, 0.2);
     }
     
     .modal-title {
       color: var(--accent);
-      font-size: 1.3rem;
+      font-size: 1.4rem;
+      font-weight: 600;
     }
     
     .close-modal {
       background: none;
       border: none;
       color: var(--light);
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .close-modal:hover {
+      color: var(--accent);
+      transform: scale(1.1);
     }
     
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
     
     .form-group label {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
       color: var(--accent);
+      font-weight: 500;
     }
     
+    .form-group select, 
     .form-group input {
       width: 100%;
-      padding: 10px;
+      padding: 12px 15px;
       background: rgba(23, 42, 69, 0.7);
       border: 1px solid rgba(100, 255, 218, 0.2);
-      border-radius: 4px;
+      border-radius: 8px;
       color: var(--light);
+      font-size: 1rem;
+      backdrop-filter: blur(5px);
     }
     
-    .form-group select {
-      width: 100%;
-      padding: 10px;
-      background: rgba(23, 42, 69, 0.7);
-      border: 1px solid rgba(100, 255, 218, 0.2);
-      border-radius: 4px;
-      color: var(--light);
+    .form-group select:focus, 
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(100, 255, 218, 0.2);
     }
     
     .modal-footer {
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
-      margin-top: 20px;
+      gap: 15px;
+      margin-top: 25px;
     }
     
     .modal-btn {
-      padding: 8px 15px;
-      border-radius: 4px;
+      padding: 12px 25px;
+      border-radius: 8px;
       border: none;
       cursor: pointer;
       font-weight: 600;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
     .btn-primary {
-      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent) 0%, #52e0c4 100%);
       color: var(--dark);
+      box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(100, 255, 218, 0.4);
     }
     
     .btn-secondary {
-      background: rgba(204, 214, 246, 0.2);
+      background: rgba(204, 214, 246, 0.1);
       color: var(--light);
+      border: 1px solid rgba(100, 255, 218, 0.2);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(204, 214, 246, 0.2);
     }
     
     .notification {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 15px 20px;
-      border-radius: 4px;
+      bottom: 30px;
+      right: 30px;
+      padding: 18px 25px;
+      border-radius: 12px;
       color: white;
       font-weight: 500;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
       z-index: 100;
       transform: translateY(100px);
       opacity: 0;
-      transition: all 0.3s ease;
+      transition: all 0.4s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     .notification.show {
@@ -423,27 +657,96 @@
     }
     
     .notification.success {
-      background: var(--success);
+      background: rgba(46, 204, 113, 0.9);
     }
     
     .notification.error {
-      background: var(--error);
+      background: rgba(231, 76, 60, 0.9);
     }
     
-    @media (max-width: 768px) {
+    .notification.info {
+      background: rgba(52, 152, 219, 0.9);
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 900px) {
       .main-container {
         flex-direction: column;
+        padding: 15px;
       }
       
       .sidebar {
         width: 100%;
-        border-right: none;
-        border-bottom: 1px solid rgba(100, 255, 218, 0.1);
-        max-height: 300px;
+        max-height: 400px;
       }
       
       .url-input {
         flex-direction: column;
+      }
+      
+      .url-input button {
+        padding: 12px;
+      }
+      
+      .data-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .search-container {
+        max-width: none;
+        margin: 0 10px;
+      }
+      
+      .logo h1 {
+        font-size: 1.4rem;
+      }
+      
+      .header-actions {
+        gap: 5px;
+      }
+      
+      .header-btn {
+        width: 36px;
+        height: 36px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      header {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      
+      .logo {
+        order: 1;
+      }
+      
+      .search-container {
+        order: 3;
+        min-width: 100%;
+        margin: 10px 0 0;
+      }
+      
+      .header-actions {
+        order: 2;
+      }
+      
+      .section-title {
+        font-size: 1.2rem;
+      }
+      
+      .modal-content {
+        padding: 20px 15px;
+      }
+      
+      .modal-footer {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .modal-btn {
+        width: 100%;
+        justify-content: center;
       }
     }
   </style>
@@ -451,28 +754,43 @@
 <body>
   <header>
     <div class="logo">
-      <div class="logo-icon"></div>
+      <div class="logo-icon">
+        <i class="fas fa-brain"></i>
+      </div>
       <h1>KNOWN</h1>
     </div>
     <div class="search-container">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon"><i class="fas fa-search"></i></span>
       <input type="text" id="globalSearch" placeholder="Search stored data...">
     </div>
-    <button id="settingsBtn">⚙️</button>
+    <div class="header-actions">
+      <div class="header-btn" id="settingsBtn">
+        <i class="fas fa-cog"></i>
+      </div>
+      <div class="header-btn" id="exportBtn">
+        <i class="fas fa-file-export"></i>
+      </div>
+    </div>
   </header>
   
   <div class="main-container">
     <aside class="sidebar">
       <div class="input-group">
-        <h2>Analyze Website</h2>
+        <h2><i class="fas fa-globe"></i> Analyze Website</h2>
         <div class="url-input">
-          <input type="text" id="urlInput" placeholder="https://example.com">
-          <button id="scrapeBtn">Scrape</button>
+          <input type="text" id="urlInput" placeholder="https://example.com" value="https://en.wikipedia.org">
+          <button id="scrapeBtn"><i class="fas fa-download"></i> Scrape</button>
         </div>
       </div>
       
       <div class="history">
-        <h2>Scraped History</h2>
+        <div class="history-header">
+          <h2><i class="fas fa-history"></i> Scraped History</h2>
+          <div class="history-actions">
+            <button class="history-btn" id="clearHistoryBtn"><i class="fas fa-trash"></i> Clear</button>
+            <button class="history-btn" id="exportAllBtn"><i class="fas fa-file-export"></i> Export All</button>
+          </div>
+        </div>
         <ul class="history-list" id="historyList">
           <li class="history-item">
             <div class="url">No history yet</div>
@@ -483,87 +801,108 @@
     
     <main class="content" id="contentArea">
       <div class="empty-state" id="emptyState">
-        <i>🌐</i>
+        <i class="fas fa-database"></i>
         <h2>No Data to Display</h2>
         <p>Enter a URL and click "Scrape" to analyze a website. Scraped data will appear here and be saved for future reference.</p>
         <div class="pro-tips">
-          <h3>Pro Tips:</h3>
+          <h3><i class="fas fa-lightbulb"></i> Pro Tips:</h3>
           <ul>
             <li>Our proprietary CORS bypass works for 85% of websites</li>
             <li>Search across all stored data using the top search bar</li>
             <li>Click on history items to view previous scrapes</li>
+            <li>Export your data for offline analysis</li>
           </ul>
         </div>
       </div>
       
-      <div id="dataDisplay" style="display: none;">
-        <h2 class="section-title">Analysis Results</h2>
-        <div class="data-grid">
-          <div class="data-card">
-            <h3><i>📄</i> Page Information</h3>
-            <div class="data-content" id="metaInfo"></div>
-          </div>
-          
-          <div class="data-card">
-            <h3><i>🔗</i> Hyperlinks</h3>
-            <div class="data-content" id="linksInfo"></div>
-          </div>
-          
-          <div class="data-card">
-            <h3><i>📝</i> Page Content</h3>
-            <div class="data-content" id="textInfo"></div>
-          </div>
-          
-          <div class="data-card">
-            <h3><i>🛠️</i> Resources</h3>
-            <div class="data-content" id="resourcesInfo"></div>
+      <div class="data-display" id="dataDisplay" style="display: none;">
+        <div>
+          <h2 class="section-title"><i class="fas fa-chart-pie"></i> Analysis Results</h2>
+          <div class="data-grid">
+            <div class="data-card">
+              <h3><i class="fas fa-info-circle"></i> Page Information</h3>
+              <div class="data-content" id="metaInfo"></div>
+            </div>
+            
+            <div class="data-card">
+              <h3><i class="fas fa-link"></i> Hyperlinks</h3>
+              <div class="data-content" id="linksInfo"></div>
+            </div>
+            
+            <div class="data-card">
+              <h3><i class="fas fa-font"></i> Page Content</h3>
+              <div class="data-content" id="textInfo"></div>
+            </div>
+            
+            <div class="data-card">
+              <h3><i class="fas fa-cube"></i> Resources</h3>
+              <div class="data-content" id="resourcesInfo"></div>
+            </div>
           </div>
         </div>
         
-        <h2 class="section-title">Raw Data</h2>
-        <div class="data-card">
-          <h3><i>📋</i> Complete Extraction</h3>
-          <div class="data-content" id="rawData"></div>
+        <div>
+          <div class="raw-data-header">
+            <h2 class="section-title"><i class="fas fa-code"></i> Raw Data</h2>
+            <button class="history-btn" id="exportCurrentBtn"><i class="fas fa-file-export"></i> Export</button>
+          </div>
+          <div class="raw-data-container">
+            <div class="raw-data-content" id="rawData"></div>
+          </div>
         </div>
       </div>
     </main>
   </div>
   
   <div class="status-bar">
-    <span id="statusText">Ready to scrape - CORS bypass active</span>
-    <span id="itemCount">0 items stored</span>
+    <div>
+      <span id="statusText">Ready to scrape - CORS bypass active</span>
+    </div>
+    <div class="cors-indicator">
+      <div class="cors-dot"></div>
+      <span id="itemCount">0 items stored</span>
+    </div>
   </div>
 
-  <!-- Settings Modal -->
-  <div id="settingsModal" class="modal">
+  <!-- Export Modal -->
+  <div id="exportModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">Advanced Settings</h3>
+        <h3 class="modal-title"><i class="fas fa-file-export"></i> Export Data</h3>
         <button class="close-modal">&times;</button>
       </div>
       
       <div class="form-group">
-        <label for="corsMode">CORS Bypass Method</label>
-        <select id="corsMode">
-          <option value="proxy">Proxy Server (Default)</option>
-          <option value="serviceworker">Service Worker (Advanced)</option>
-          <option value="direct">Direct Fetch (CORS-enabled sites only)</option>
+        <label for="exportFormat"><i class="fas fa-file-code"></i> Export Format</label>
+        <select id="exportFormat">
+          <option value="json">JSON (Full Data)</option>
+          <option value="csv">CSV (Tabular Data)</option>
+          <option value="html">HTML Report</option>
+          <option value="txt">Text Summary</option>
         </select>
       </div>
       
-      <div class="form-group">
-        <label for="proxyUrl">Custom Proxy URL</label>
-        <input type="text" id="proxyUrl" placeholder="https://yourproxy.com/?url=">
+      <div class="form-group" id="exportScopeGroup">
+        <label for="exportScope"><i class="fas fa-database"></i> Export Scope</label>
+        <select id="exportScope">
+          <option value="current">Current Entry</option>
+          <option value="all">All Entries</option>
+          <option value="selected">Selected Entries</option>
+        </select>
       </div>
       
-      <div class="form-group">
-        <label for="storageLimit">Storage Limit (MB)</label>
-        <input type="number" id="storageLimit" min="1" max="50" value="10">
+      <div class="form-group" id="fileNameGroup">
+        <label for="fileName"><i class="fas fa-file-signature"></i> File Name</label>
+        <input type="text" id="fileName" placeholder="Enter file name">
       </div>
       
       <div class="modal-footer">
-        <button class="modal-btn btn-secondary" id="cancelSettings">Cancel</button>
-        <button class="modal-btn btn-primary" id="saveSettings">Save</button>
+        <button class="modal-btn btn-secondary" id="cancelExport">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button class="modal-btn btn-primary" id="confirmExport">
+          <i class="fas fa-download"></i> Export
+        </button>
       </div>
     </div>
   </div>
@@ -588,55 +927,23 @@
     const statusText = document.getElementById('statusText');
     const itemCount = document.getElementById('itemCount');
     const settingsBtn = document.getElementById('settingsBtn');
-    const settingsModal = document.getElementById('settingsModal');
+    const exportBtn = document.getElementById('exportBtn');
+    const exportModal = document.getElementById('exportModal');
     const closeModal = document.querySelector('.close-modal');
-    const cancelSettings = document.getElementById('cancelSettings');
-    const saveSettings = document.getElementById('saveSettings');
-    const corsMode = document.getElementById('corsMode');
-    const proxyUrl = document.getElementById('proxyUrl');
-    const storageLimit = document.getElementById('storageLimit');
+    const cancelExport = document.getElementById('cancelExport');
+    const confirmExport = document.getElementById('confirmExport');
+    const exportFormat = document.getElementById('exportFormat');
+    const exportScope = document.getElementById('exportScope');
+    const fileName = document.getElementById('fileName');
+    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+    const exportAllBtn = document.getElementById('exportAllBtn');
+    const exportCurrentBtn = document.getElementById('exportCurrentBtn');
     const notification = document.getElementById('notification');
     
     // Initialize app
     const STORAGE_KEY = 'KNOWN_DB';
-    const SETTINGS_KEY = 'KNOWN_SETTINGS';
     let db = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    
-    // Default settings
-    let settings = {
-      corsMode: 'proxy',
-      proxyUrl: 'https://api.allorigins.win/raw?url=',
-      storageLimit: 10
-    };
-    
-    // Load settings
-    function loadSettings() {
-      const savedSettings = localStorage.getItem(SETTINGS_KEY);
-      if (savedSettings) {
-        settings = JSON.parse(savedSettings);
-        corsMode.value = settings.corsMode;
-        proxyUrl.value = settings.proxyUrl;
-        storageLimit.value = settings.storageLimit;
-      }
-    }
-    
-    // Save settings
-    function saveSettingsToStorage() {
-      settings.corsMode = corsMode.value;
-      settings.proxyUrl = proxyUrl.value;
-      settings.storageLimit = parseInt(storageLimit.value);
-      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-      showNotification('Settings saved successfully!', 'success');
-    }
-    
-    // Show notification
-    function showNotification(message, type) {
-      notification.textContent = message;
-      notification.className = `notification ${type} show`;
-      setTimeout(() => {
-        notification.classList.remove('show');
-      }, 3000);
-    }
+    let currentEntry = null;
     
     // Update item count
     function updateItemCount() {
@@ -692,7 +999,8 @@
     function displayScrapedData(data) {
       // Hide empty state
       emptyState.style.display = 'none';
-      dataDisplay.style.display = 'block';
+      dataDisplay.style.display = 'flex';
+      currentEntry = data;
       
       // Update status
       statusText.textContent = `Showing data for: ${data.url}`;
@@ -708,21 +1016,26 @@
       // Display links
       if (data.links.length > 0) {
         linksInfo.innerHTML = '<ul>' + data.links.map(link => 
-          `<li><a href="${link}" target="_blank">${link}</a></li>`
-        ).join('') + '</ul>';
+          `<li><a href="${link}" target="_blank">${formatText(link, 60)}</a></li>`
+        ).slice(0, 15).join('') + '</ul>';
+        if (data.links.length > 15) {
+          linksInfo.innerHTML += `<p>+ ${data.links.length - 15} more links</p>`;
+        }
       } else {
         linksInfo.innerHTML = '<p>No links found</p>';
       }
       
       // Display text
-      textInfo.innerHTML = `<p>${formatText(data.text)}</p>`;
+      textInfo.innerHTML = `<p>${formatText(data.text, 1000)}</p>`;
       
       // Display resources
       resourcesInfo.innerHTML = `
         <p><strong>Scripts (${data.scripts.length}):</strong></p>
-        <ul>${data.scripts.map(script => `<li>${script}</li>`).join('') || '<li>None</li>'}</ul>
+        <ul>${data.scripts.map(script => `<li>${formatText(script, 50)}</li>`).slice(0, 5).join('') || '<li>None</li>'}</ul>
+        ${data.scripts.length > 5 ? `<p>+ ${data.scripts.length - 5} more scripts</p>` : ''}
         <p><strong>Stylesheets (${data.stylesheets.length}):</strong></p>
-        <ul>${data.stylesheets.map(style => `<li>${style}</li>`).join('') || '<li>None</li>'}</ul>
+        <ul>${data.stylesheets.map(style => `<li>${formatText(style, 50)}</li>`).slice(0, 5).join('') || '<li>None</li>'}</ul>
+        ${data.stylesheets.length > 5 ? `<p>+ ${data.stylesheets.length - 5} more stylesheets</p>` : ''}
       `;
       
       // Display raw data
@@ -734,85 +1047,67 @@
       statusText.textContent = `Using CORS bypass for: ${url}`;
       
       try {
-        // Try different methods based on settings
-        switch(settings.corsMode) {
-          case 'serviceworker':
-            return await fetchViaServiceWorker(url);
-          case 'direct':
-            return await fetchDirect(url);
-          case 'proxy':
-          default:
-            return await fetchViaProxy(url);
-        }
+        // Try direct fetch first
+        const direct = await fetchDirect(url);
+        if (direct) return direct;
+        
+        // If direct fails, try proxy method
+        const proxy = await fetchViaProxy(url);
+        if (proxy) return proxy;
+        
+        // If both fail, throw error
+        throw new Error('All CORS bypass methods failed');
       } catch (error) {
-        console.error('CORS bypass failed:', error);
-        // Fallback to proxy method
-        return await fetchViaProxy(url);
+        throw error;
       }
     }
     
     // Direct fetch (for CORS-enabled sites)
     async function fetchDirect(url) {
-      const response = await fetch(url, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      try {
+        const response = await fetch(url, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        
+        return await response.text();
+      } catch (error) {
+        console.log('Direct fetch failed, trying proxy...');
+        return null;
       }
-      
-      return await response.text();
     }
     
     // Fetch via proxy
     async function fetchViaProxy(url) {
-      const proxy = settings.proxyUrl || 'https://api.allorigins.win/raw?url=';
-      const response = await fetch(proxy + encodeURIComponent(url));
-      
-      if (!response.ok) {
-        throw new Error(`Proxy error! status: ${response.status}`);
-      }
-      
-      return await response.text();
-    }
-    
-    // Service Worker method - innovative client-side CORS bypass
-    async function fetchViaServiceWorker(url) {
-      // Register service worker if not already registered
-      if (!navigator.serviceWorker.controller) {
-        await registerServiceWorker();
-      }
-      
-      // Use the service worker to fetch the content
-      const response = await fetch(`/proxy?url=${encodeURIComponent(url)}`);
-      
-      if (!response.ok) {
-        throw new Error(`Service Worker error! status: ${response.status}`);
-      }
-      
-      return await response.text();
-    }
-    
-    // Register service worker for CORS bypass
-    async function registerServiceWorker() {
       try {
-        const registration = await navigator.serviceWorker.register('/sw.js', {
-          scope: '/'
-        });
+        const proxies = [
+          'https://api.allorigins.win/raw?url=',
+          'https://corsproxy.io/?',
+          'https://cors-anywhere.herokuapp.com/'
+        ];
         
-        if (registration.installing) {
-          console.log('Service worker installing');
-        } else if (registration.waiting) {
-          console.log('Service worker installed');
-        } else if (registration.active) {
-          console.log('Service worker active');
+        // Try each proxy until one works
+        for (const proxy of proxies) {
+          try {
+            const response = await fetch(proxy + encodeURIComponent(url));
+            
+            if (!response.ok) {
+              continue; // Try next proxy
+            }
+            
+            return await response.text();
+          } catch (e) {
+            continue; // Try next proxy
+          }
         }
         
-        return registration;
+        throw new Error('All proxies failed');
       } catch (error) {
-        console.error('Service worker registration failed:', error);
         throw error;
       }
     }
@@ -900,9 +1195,131 @@
       }
     }
     
-    // Search functionality
-    function searchData(term) {
-      term = term.toLowerCase().trim();
+    // Show notification
+    function showNotification(message, type) {
+      notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+      notification.className = `notification ${type} show`;
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 4000);
+    }
+    
+    // Export data function
+    function exportData() {
+      const format = exportFormat.value;
+      const scope = exportScope.value;
+      let name = fileName.value || 'known_export';
+      
+      let dataToExport;
+      
+      if (scope === 'current' && currentEntry) {
+        dataToExport = [currentEntry];
+        name += `_${currentEntry.url.replace(/[^a-z0-9]/gi, '_')}`;
+      } else if (scope === 'all') {
+        dataToExport = db;
+      } else {
+        showNotification('No data selected for export', 'error');
+        return;
+      }
+      
+      let blob, filename;
+      
+      switch(format) {
+        case 'json':
+          blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
+          filename = `${name}.json`;
+          break;
+        case 'csv':
+          // Simple CSV conversion
+          let csv = 'URL,Title,Description,Timestamp\n';
+          dataToExport.forEach(entry => {
+            csv += `"${entry.url}","${entry.title}","${entry.meta.description}","${entry.timestamp}"\n`;
+          });
+          blob = new Blob([csv], { type: 'text/csv' });
+          filename = `${name}.csv`;
+          break;
+        case 'html':
+          // Simple HTML report
+          let html = `<html><head><title>KNOWN Export</title></head><body>`;
+          html += `<h1>KNOWN Data Export</h1><p>Exported on ${new Date().toLocaleString()}</p>`;
+          dataToExport.forEach(entry => {
+            html += `<div style="margin-bottom: 40px; border-bottom: 1px solid #ccc; padding-bottom: 20px;">`;
+            html += `<h2>${entry.title || 'No Title'}</h2>`;
+            html += `<p><strong>URL:</strong> ${entry.url}</p>`;
+            html += `<p><strong>Description:</strong> ${entry.meta.description || 'N/A'}</p>`;
+            html += `<p><strong>Date:</strong> ${new Date(entry.timestamp).toLocaleString()}</p>`;
+            html += `</div>`;
+          });
+          html += `</body></html>`;
+          blob = new Blob([html], { type: 'text/html' });
+          filename = `${name}.html`;
+          break;
+        case 'txt':
+          // Simple text report
+          let text = 'KNOWN Data Export\n';
+          text += `Exported on ${new Date().toLocaleString()}\n\n`;
+          dataToExport.forEach((entry, index) => {
+            text += `Entry #${index + 1}\n`;
+            text += `URL: ${entry.url}\n`;
+            text += `Title: ${entry.title || 'No Title'}\n`;
+            text += `Description: ${entry.meta.description || 'N/A'}\n`;
+            text += `Date: ${new Date(entry.timestamp).toLocaleString()}\n\n`;
+          });
+          blob = new Blob([text], { type: 'text/plain' });
+          filename = `${name}.txt`;
+          break;
+      }
+      
+      // Create download link
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      showNotification(`Data exported as ${filename}`, 'success');
+      exportModal.style.display = 'none';
+    }
+    
+    // Clear history
+    function clearHistory() {
+      if (confirm('Are you sure you want to clear all scraped data? This cannot be undone.')) {
+        db = [];
+        localStorage.removeItem(STORAGE_KEY);
+        renderHistory();
+        emptyState.style.display = 'flex';
+        dataDisplay.style.display = 'none';
+        showNotification('All data cleared', 'success');
+      }
+    }
+    
+    // Event listeners
+    scrapeBtn.addEventListener('click', () => {
+      const url = urlInput.value.trim();
+      if (!url) {
+        showNotification('Please enter a URL', 'error');
+        return;
+      }
+      
+      // Add protocol if missing
+      let targetUrl = url;
+      if (!url.startsWith('http')) {
+        targetUrl = 'https://' + url;
+        urlInput.value = targetUrl;
+      }
+      
+      scrapeWebsite(targetUrl);
+    });
+    
+    urlInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        scrapeBtn.click();
+      }
+    });
+    
+    globalSearch.addEventListener('input', () => {
+      const term = globalSearch.value.toLowerCase().trim();
       
       if (!term) {
         renderHistory();
@@ -939,124 +1356,76 @@
         });
         historyList.appendChild(li);
       });
-    }
+    });
     
-    // Event listeners
-    scrapeBtn.addEventListener('click', () => {
-      const url = urlInput.value.trim();
-      if (!url) {
-        showNotification('Please enter a URL', 'error');
+    // Export functionality
+    exportBtn.addEventListener('click', () => {
+      fileName.value = `known_export_${new Date().toISOString().slice(0, 10)}`;
+      exportModal.style.display = 'flex';
+    });
+    
+    exportCurrentBtn.addEventListener('click', () => {
+      if (!currentEntry) {
+        showNotification('No current entry to export', 'error');
         return;
       }
-      
-      // Add protocol if missing
-      let targetUrl = url;
-      if (!url.startsWith('http')) {
-        targetUrl = 'https://' + url;
-        urlInput.value = targetUrl;
+      fileName.value = `known_${currentEntry.url.replace(/[^a-z0-9]/gi, '_')}`;
+      exportScope.value = 'current';
+      exportModal.style.display = 'flex';
+    });
+    
+    exportAllBtn.addEventListener('click', () => {
+      if (db.length === 0) {
+        showNotification('No data to export', 'error');
+        return;
       }
-      
-      scrapeWebsite(targetUrl);
-    });
-    
-    urlInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        scrapeBtn.click();
-      }
-    });
-    
-    globalSearch.addEventListener('input', () => {
-      searchData(globalSearch.value);
-    });
-    
-    // Settings modal
-    settingsBtn.addEventListener('click', () => {
-      settingsModal.style.display = 'flex';
+      fileName.value = `known_full_export_${new Date().toISOString().slice(0, 10)}`;
+      exportScope.value = 'all';
+      exportModal.style.display = 'flex';
     });
     
     closeModal.addEventListener('click', () => {
-      settingsModal.style.display = 'none';
+      exportModal.style.display = 'none';
     });
     
-    cancelSettings.addEventListener('click', () => {
-      settingsModal.style.display = 'none';
+    cancelExport.addEventListener('click', () => {
+      exportModal.style.display = 'none';
     });
     
-    saveSettings.addEventListener('click', () => {
-      saveSettingsToStorage();
-      settingsModal.style.display = 'none';
-    });
+    confirmExport.addEventListener('click', exportData);
+    
+    clearHistoryBtn.addEventListener('click', clearHistory);
     
     window.addEventListener('click', (e) => {
-      if (e.target === settingsModal) {
-        settingsModal.style.display = 'none';
+      if (e.target === exportModal) {
+        exportModal.style.display = 'none';
       }
     });
     
     // Initialize the app
-    loadSettings();
     renderHistory();
     updateItemCount();
     
-    // Check if service workers are supported
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        registerServiceWorker().catch(error => {
-          console.log('Service Worker registration failed, falling back to proxy method');
-        });
+    // Example data for demo purposes
+    if (db.length === 0) {
+      db.push({
+        url: "https://example.com",
+        timestamp: new Date().toISOString(),
+        title: "Example Domain",
+        meta: {
+          description: "This is an example domain",
+          keywords: "example, test, domain",
+          charset: "UTF-8"
+        },
+        links: [
+          "https://www.iana.org/domains/example",
+          "https://example.com/about",
+          "https://example.com/contact"
+        ],
+        text: "Example Domain This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.",
+        scripts: ["https://example.com/script.js"],
+        stylesheets: ["https://example.com/style.css"]
       });
-    }
-  </script>
-
-  <!-- Service Worker for CORS bypass -->
-  <script id="service-worker-script" type="text/javascript">
-    // This will be injected as the service worker script
-    const serviceWorkerScript = `
-      self.addEventListener('install', event => {
-        event.waitUntil(self.skipWaiting());
-      });
-      
-      self.addEventListener('activate', event => {
-        event.waitUntil(self.clients.claim());
-      });
-      
-      self.addEventListener('fetch', event => {
-        const url = new URL(event.request.url);
-        
-        // Intercept requests to our proxy endpoint
-        if (url.pathname === '/proxy') {
-          const targetUrl = url.searchParams.get('url');
-          
-          if (!targetUrl) {
-            return event.respondWith(new Response('Missing URL parameter', { status: 400 }));
-          }
-          
-          event.respondWith(
-            fetch(targetUrl, {
-              headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-              }
-            }).catch(error => {
-              return new Response('CORS bypass failed', { status: 500 });
-            })
-          );
-        }
-      });
-    `;
-    
-    // Create a Blob URL for the service worker
-    const blob = new Blob([serviceWorkerScript], { type: 'application/javascript' });
-    const swUrl = URL.createObjectURL(blob);
-    
-    // Register the service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register(swUrl)
-        .then(registration => {
-          console.log('Service Worker registered with scope:', registration.scope);
-        })
-        .catch(error => {
-          console.log('Service Worker registration failed:', error);
-        });
     }
   </script>
 </body>

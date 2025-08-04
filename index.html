@@ -4,9 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KNOWN - Professional Web Intelligence</title>
+    
+    <!-- PWA Manifest and Metadata -->
+    <meta name="theme-color" content="#0a192f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBmaWxsPSIjMGExOTJmIj48cGF0aCBkPSJNMTg0IDBjMzAuOSAwIDU2IDI1LjEgNTYgNTZ2Ni40YzAgMTMuMy0xMC43IDI0LTI0IDI0Yy0zLjQgMC02LjYtLjctOS42LTJjLTcuNCAxMC45LTE5LjIgMTgtMzIuNCAxOHMtMjUtNy4xLTMyLjQtMThjLTMgLjktNi4yIDEuNC05LjYgMS40Yy0xMy4zIDAtMjQtMTAuNy0yNC0yNFY1NmMwLTMwLjkgMjUuMS01NiA1Ni01NnptNTYgMTIwYzAtMTMuMyAxMC43LTI0IDI0LTI0YzMuNCAwIDYuNi43IDkuNiAyYzcuNC0xMC45IDE5LjItMTggMzIuNC0xOHMyNSA3LjEgMzIuNCAxOGMzLS45IDYuMi0xLjQgOS42LTEuNGMxMy4zIDAgMjQgMTAuNyAyNCAyNHY2LjRjMCAzMC45LTI1LjEgNTYtNTYgNTZjLTMwLjkgMC01Ni0yNS4xLTU2LTU2di02LjRjMC0xMy4zIDEwLjctMjQgMjQtMjRjMTMuMyAwIDI0IDEwLjcgMjQgMjR2MjRjMCAzNS4zLTI4LjcgNjQtNjQgNjRIMjI0djY0aDMyYzE3LjcgMCAzMiAxNC4zIDMyIDMydjMyYzAgMTcuNy0xNC4zIDMyLTMyIDMySDE5MmMtMTcuNyAwLTMyLTE0LjMtMzItMzJWMzg0YzAtMTcuNyAxNC4zLTMyIDMyLTMyaDMyVjI4OEgxOTJjLTM1LjMgMC02NC0yOC43LTY0LTY0di0yNGMwLTEzLjMgMTAuNy0yNCAyNC0yNHMyNCAxMC43IDI0IDI0djYuNGMwIDMwLjkgMjUuMSA1NiA1NiA1NmMzMC45IDAgNTYtMjUuMSA1Ni01NnYtNi40YzAtMTMuMy0xMC43LTI0LTI0LTI0Yy0zLjQgMC02LjYuNy05LjYgMmMtNy40LTEwLjktMTkuMi0xOC0zMi40LTE4cy0yNSA3LjEtMzIuNCAxOGMtMy0uOS02LjItMS40LTkuNi0xLjRjLTEzLjMgMC0yNCAxMC43LTI0IDI0djYuNGMwIDMwLjktMjUuMSA1Ni01NiA1NmMtMzAuOSAwLTU2LTI1LjEtNTYtNTZ2LTYuNGMwLTEzLjMgMTAuNy0yNCAyNC0yNGMxMy4zIDAgMjQgMTAuNyAyNCAyNHYyNGMwIDM1LjMgMjguNyA2NCA2NCA2NGg2NHY2NEgxMjhjLTE3LjcgMC0zMiAxNC4zLTMyIDMydjMyYzAgMTcuNyAxNC4zIDMyIDMyIDMyaDY0YzE3LjcgMCAzMi0xNC4zIDMyLTMyVjQ4MGMwLTE3LjctMTQuMy0zMi0zMi0zMkg5NlYzNTJoNjRjMzUuMyAwIDY0LTI4LjcgNjQtNjR2LTI0YzAtMTMuMy0xMC43LTI0LTI0LTI0cy0yNCAxMC43LTI0IDI0djYuNGMwIDMwLjktMjUuMSA1Ni01NiA1NmMtMzAuOSAwLTU2LTI1LjEtNTYtNTZ2LTYuNGMwLTEzLjMgMTAuNy0yNCAyNC0yNGMzLjQgMCA2LjYuNyA5LjYgMmM3LjQtMTAuOSAxOS4yLTE4IDMyLjQtMThzMjUgNy4xIDMyLjQgMThjMy0uOSA2LjItMS40IDkuNi0xLjRjMTMuMyAwIDI0IDEwLjcgMjQgMjR2Ni40YzAgMzAuOSAyNS4xIDU2IDU2IDU2czU2LTI1LjEgNTYtNTZ2LTYuNGMwLTEzLjMtMTAuNy0yNC0yNC0yNHMtMjQgMTAuNy0yNCAyNHYyNGMwIDM1LjMtMjguNyA2NC02NCA2NEgxNjBjLTM1LjMgMC02NC0yOC43LTY0LTY0di0yNGMwLTEzLjMgMTAuNy0yNCAyNC0yNGMxMy4zIDAgMjQgMTAuNyAyNCAyNHY2LjRjMCAzMC45IDI1LjEgNTYgNTYgNTZjMzAuOSAwIDU2LTI1LjEgNTYtNTZ2LTYuNGMwLTEzLjMtMTAuNy0yNC0yNC0yNGMtMy40IDAtNi42LjctOS42IDJjLTcuNC0xMC45LTE5LjItMTgtMzIuNC0xOHMtMjUgNy4xLTMyLjQgMThjLTMtLjktNi4yLTEuNC05LjYtMS40Yy0xMy4zIDAtMjQgMTAuNy0yNCAyNHY2LjRjMCAzMC45LTI1LjEgNTYtNTYgNTZjLTMwLjkgMC01Ni0yNS4xLTU2LTU2VjEyMGMwLTEzLjMgMTAuNy0yNCAyNC0yNGMxMy4zIDAgMjQgMTAuNyAyNCAyNHYyNGMwIDM1LjMgMjguNyA2NCA2NCA2NGg2NHY2NEgxMjhjLTE3LjcgMC0zMiAxNC4zLTMyIDMydjMyYzAgMTcuNyAxNC4zIDMyIDMyIDMyaDY0YzE3LjcgMCAzMi0xNC4zIDMyLTMyVjM1MmMwLTE3LjctMTQuMy0zMi0zMi0zMkg5NlYyNTZoNjRjMzUuMyAwIDY0LTI4LjcgNjQtNjR2LTI0YzAtMTMuMy0xMC43LTI0LTI0LTI0cy0yNCAxMC43LTI0IDI0djYuNGMwIDMwLjktMjUuMSA1Ni01NiA1NmMtMzAuOSAwLTU2LTI1LjEtNTYtNTZ2LTYuNGMwLTEzLjMgMTAuNy0yNCAyNC0yNGMzLjQgMCA2LjYuNyA5LjYgMmM3LjQtMTAuOSAxOS4yLTE4IDMyLjQtMThzMjUgNy4xIDMyLjQgMThjMy0uOSA2LjItMS40IDkuNi0xLjRjMTMuMyAwIDI0IDEwLjcgMjQgMjR2Ni40YzAgMzAuOSAyNS4xIDU2IDU2IDU2czU2LTI1LjEgNTYtNTZ2LTYuNGMwLTEzLjMtMTAuNy0yNC0yNC0yNHMtMjQgMTAuNy0yNCAyNHYyNGMwIDM1LjMtMjguNyA2NC02NCA2NEgxNjBjLTM1LjMgMC02NC0yOC43LTY0LTY0di0yNGMwLTEzLjMgMTAuNy0yNCAyNC0yNGMxMy4zIDAgMjQgMTAuNyAyNCAyNHY2LjRjMCAzMC45IDI1LjEgNTYgNTYgNTZjMzAuOSAwIDU2LTI1LjEgNTYtNTZ2LTYuNGMwLTEzLjMtMTAuNy0yNC0yNC0yNGMtMy40IDAtNi42LjctOS42IDJjLTcuNC0xMC45LTE5LjItMTgtMzIuNC0xOHMtMjUgNy4xLTMyLjQgMThjLTMtLjktNi4yLTEuNC05LjYtMS40Yy0xMy4zIDAtMjQgMTAuNy0yNCAyNHY2LjRjMCAzMC45LTI1LjEgNTYtNTYgNTZjLTMwLjkgMC01Ni0yNS4xLTU2LTU2VjU2QzAgMjUuMSAyNS4xIDAgNTYgMGgxMjhjMzAuOSAwIDU2IDI1LjEgNTYgNTZ2Ni40YzAgMTMuMy0xMC43IDI0LTI0IDI0Yy0zLjQgMC02LjYtLjctOS42LTJjLTcuNCAxMC45LTE5LjIgMTgtMzIuNCAxOHMtMjUtNy4xLTMyLjQtMThjLTMgLjktNi4yIDEuNC05LjYgMS40Yy0xMy4zIDAtMjQtMTAuNy0yNC0yNFY1NmMwLTMwLjkgMjUuMS01NiA1Ni01NmgxMjh6Ii8+PC9zdmc+">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIktOT1dOIFdlYiBTY3JhcGVyIiwKICAic2hvcnRfbmFtZSI6ICJLTk9XTiIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAidGhlbWVfY29sb3IiOiAiIzBhMTkyZiIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzAyMGMxYiIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jaUlIWnBaWGRDYjNnOUlqQWdNQ0F6TlRBZ05UQXdJajQ4YzNSNWJHVSvJRHh3WVhSb0lHWnBiR3c5SW5WeWJDZ2pabWxzZEdWeU1TNHdMakF1TUNBeE1EQXVNVFlpUGcwS1AzTjJaejQ9IiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSFpwWlhkQ2IzZzlJakFnTUNBek5UQWdOVEF3SWo0OGMzUjViR1UryUR4d1lYUm9JR1pwYkd3OUluVnliQ2dqWm1sc2RHVnlNUzR3TGpBdU1DQXhNREF1TVRZaVBnMEtQM04yWno0PSIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* Original KNOWN styles */
         :root {
             --primary: #0a192f;
             --secondary: #172a45;
@@ -631,6 +640,176 @@
             transform: translateY(-3px);
         }
         
+        /* PWA Install Button */
+        .pwa-install-container {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .pwa-install-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--success);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            border: none;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+            }
+            
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+            }
+            
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+            }
+        }
+        
+        .pwa-install-btn:hover {
+            background: #27ae60;
+            transform: scale(1.05);
+        }
+        
+        /* Install Prompt */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--light);
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+            transform: translateY(150%);
+            transition: transform 0.5s ease;
+            color: var(--dark);
+        }
+        
+        .install-prompt.show {
+            transform: translateY(0);
+        }
+        
+        .install-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+            font-size: 20px;
+        }
+        
+        .install-text {
+            flex: 1;
+        }
+        
+        .install-close {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            color: var(--dark);
+            cursor: pointer;
+        }
+        
+        /* Offline Indicator */
+        .offline-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--warning);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .offline-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 0.9rem;
+            max-width: 90%;
+            text-align: center;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+        
+        /* Export loading indicator */
+        .export-loader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+        }
+        
+        .loader-spinner {
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid var(--accent);
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         /* Mobile responsiveness */
         @media (max-width: 1024px) {
             .main-container {
@@ -685,6 +864,11 @@
             
             .export-options {
                 flex-direction: column;
+            }
+            
+            .pwa-install-container {
+                bottom: 80px;
+                right: 15px;
             }
         }
         
@@ -744,6 +928,16 @@
                 flex-direction: column;
                 gap: 10px;
                 align-items: flex-start;
+            }
+            
+            .pwa-install-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            
+            .install-prompt {
+                max-width: calc(100% - 40px);
             }
         }
     </style>
@@ -953,6 +1147,42 @@
         <span>Website scraped successfully!</span>
     </div>
 
+    <!-- PWA Install Button -->
+    <div class="pwa-install-container" id="pwaInstallContainer">
+        <button class="pwa-install-btn" id="pwaInstallBtn">
+            <i class="fas fa-download"></i>
+        </button>
+    </div>
+    
+    <!-- Install Prompt -->
+    <div class="install-prompt" id="installPrompt">
+        <div class="install-icon">
+            <i class="fas fa-download"></i>
+        </div>
+        <div class="install-text">
+            <strong>Install KNOWN</strong>
+            <p>Add to home screen for quick access</p>
+        </div>
+        <button class="install-close" id="closePrompt">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <!-- Offline Indicator -->
+    <div class="offline-indicator" id="offlineIndicator">
+        <i class="fas fa-wifi-slash"></i>
+        <span>You are currently offline</span>
+    </div>
+    
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+    
+    <!-- Export loading indicator -->
+    <div class="export-loader" id="exportLoader">
+        <div class="loader-spinner"></div>
+        <p>Generating report...</p>
+    </div>
+
     <script>
         // DOM elements
         const urlInput = document.getElementById('urlInput');
@@ -979,11 +1209,19 @@
         const exportHtml = document.getElementById('exportHtml');
         const notification = document.getElementById('notification');
         const exportBadge = document.getElementById('exportBadge');
+        const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+        const pwaInstallContainer = document.getElementById('pwaInstallContainer');
+        const installPrompt = document.getElementById('installPrompt');
+        const closePrompt = document.getElementById('closePrompt');
+        const offlineIndicator = document.getElementById('offlineIndicator');
+        const toast = document.getElementById('toast');
+        const exportLoader = document.getElementById('exportLoader');
         
         // Initialize app
         const STORAGE_KEY = 'KNOWN_DB';
         let db = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
         let currentEntry = null;
+        let deferredPrompt; // For PWA installation
         
         // Show notification
         function showNotification(message, type) {
@@ -992,6 +1230,17 @@
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 4000);
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.style.background = type === 'success' ? 'var(--success)' : 'var(--error)';
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
         
         // Update item count
@@ -1407,7 +1656,11 @@
                     fileName = `known_${currentEntry.url.replace(/[^a-z0-9]/gi, '_')}.html`;
                     break;
                 case 'pdf':
-                    showNotification('PDF export requires additional libraries', 'info');
+                    exportLoader.style.display = 'flex';
+                    setTimeout(() => {
+                        exportLoader.style.display = 'none';
+                        showToast('PDF export requires additional libraries', 'info');
+                    }, 1500);
                     return;
                 default:
                     showNotification('Invalid export format', 'error');
@@ -1435,6 +1688,93 @@
                 emptyState.style.display = 'flex';
                 dataDisplay.style.display = 'none';
                 showNotification('All data cleared', 'success');
+            }
+        }
+        
+        // PWA Installation Handling
+        function handlePWAInstall() {
+            // Listen for beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Prevent the mini-infobar from appearing on mobile
+                e.preventDefault();
+                // Stash the event so it can be triggered later
+                deferredPrompt = e;
+                // Show the install button
+                pwaInstallContainer.style.display = 'block';
+                
+                // Also show the install prompt after 5 seconds
+                setTimeout(() => {
+                    if (deferredPrompt) {
+                        installPrompt.classList.add('show');
+                    }
+                }, 5000);
+            });
+            
+            // Handle install button click
+            pwaInstallBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    // Show the install prompt
+                    deferredPrompt.prompt();
+                    // Wait for the user to respond to the prompt
+                    const { outcome } = await deferredPrompt.userChoice;
+                    // Optionally, send analytics event with outcome of user choice
+                    console.log(`User response to the install prompt: ${outcome}`);
+                    // Hide the install button
+                    pwaInstallContainer.style.display = 'none';
+                    // Clear the deferredPrompt variable
+                    deferredPrompt = null;
+                    // Hide the prompt
+                    installPrompt.classList.remove('show');
+                }
+            });
+            
+            // Close prompt
+            closePrompt.addEventListener('click', () => {
+                installPrompt.classList.remove('show');
+            });
+            
+            // Listen for app installed event
+            window.addEventListener('appinstalled', () => {
+                // Hide the install button
+                pwaInstallContainer.style.display = 'none';
+                // Clear the deferredPrompt variable
+                deferredPrompt = null;
+                // Hide the prompt
+                installPrompt.classList.remove('show');
+                // Show success message
+                showToast('App installed successfully!');
+            });
+            
+            // Offline detection
+            window.addEventListener('offline', () => {
+                offlineIndicator.classList.add('show');
+                statusText.textContent = 'Offline mode - Using cached data';
+            });
+            
+            window.addEventListener('online', () => {
+                offlineIndicator.classList.remove('show');
+                statusText.textContent = 'Ready to scrape - CORS bypass active';
+            });
+            
+            // Initialize offline status
+            if (!navigator.onLine) {
+                offlineIndicator.classList.add('show');
+                statusText.textContent = 'Offline mode - Using cached data';
+            }
+        }
+        
+        // Register Service Worker
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/service-worker.js')
+                        .then(registration => {
+                            console.log('Service Worker registered with scope:', registration.scope);
+                        })
+                        .catch(error => {
+                            console.error('Service Worker registration failed:', error);
+                        });
+                });
             }
         }
         
@@ -1499,6 +1839,10 @@
         // Initialize the app
         renderHistory();
         updateItemCount();
+        
+        // Initialize PWA features
+        handlePWAInstall();
+        registerServiceWorker();
         
         // Display example data initially
         const exampleData = {

@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Enhanced KNOWN styles with bypass techniques info */
         :root {
             --primary: #0a192f;
             --secondary: #172a45;
@@ -264,6 +263,28 @@
             border-radius: 8px;
             border-left: 3px solid var(--success);
             font-size: 0.8rem;
+        }
+        
+        .proxy-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 8px;
+            background: rgba(23, 42, 69, 0.3);
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+        
+        .proxy-status .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+        
+        .proxy-status .status-dot.warning {
+            background: var(--warning);
         }
         
         .history {
@@ -674,7 +695,6 @@
             transform: translateY(-3px);
         }
         
-        /* PWA Install Button */
         .pwa-install-container {
             position: fixed;
             bottom: 80px;
@@ -721,7 +741,6 @@
             transform: scale(1.05);
         }
         
-        /* Install Prompt */
         .install-prompt {
             position: fixed;
             bottom: 15px;
@@ -774,7 +793,6 @@
             cursor: pointer;
         }
         
-        /* Offline Indicator */
         .offline-indicator {
             position: fixed;
             bottom: 15px;
@@ -798,7 +816,6 @@
             transform: translateY(0);
         }
         
-        /* Toast notification */
         .toast {
             position: fixed;
             bottom: 15px;
@@ -821,7 +838,6 @@
             opacity: 1;
         }
         
-        /* Export loading indicator */
         .export-loader {
             display: none;
             position: fixed;
@@ -852,7 +868,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Scraping status indicator */
         .scraping-status {
             display: flex;
             align-items: center;
@@ -871,7 +886,6 @@
             animation: pulse 1.5s infinite;
         }
         
-        /* Mobile-specific adjustments */
         @media (min-width: 768px) {
             .main-container {
                 flex-direction: row;
@@ -897,7 +911,6 @@
             }
         }
         
-        /* Legal compliance section */
         .legal-compliance {
             background: rgba(23, 42, 69, 0.5);
             padding: 15px;
@@ -921,6 +934,28 @@
         
         .compliance-list li {
             margin-bottom: 5px;
+        }
+        
+        .proxy-health {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        .health-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+        
+        .health-dot.warning {
+            background: var(--warning);
+        }
+        
+        .health-dot.error {
+            background: var(--error);
         }
     </style>
 </head>
@@ -983,6 +1018,15 @@
                     <p>Using proxy rotation, dynamic headers, and legal compliance</p>
                 </div>
                 
+                <div class="proxy-status">
+                    <div class="status-dot" id="proxyStatusDot"></div>
+                    <span id="proxyStatusText">Proxy health: Excellent</span>
+                </div>
+                
+                <div class="proxy-health" id="proxyHealth">
+                    <!-- Health dots will be added dynamically -->
+                </div>
+                
                 <div class="scraping-status" id="scrapingStatus" style="display: none; margin-top: 10px;">
                     <div class="scraping-dot"></div>
                     <span>Rotating proxies...</span>
@@ -1035,8 +1079,8 @@
                 <div class="pro-tips">
                     <h3><i class="fas fa-lightbulb"></i> Advanced Bypass Techniques:</h3>
                     <ul>
-                        <li>Intelligent proxy rotation with 20+ endpoints</li>
-                        <li>Dynamic user agent rotation with 30+ signatures</li>
+                        <li>Intelligent proxy rotation with 30+ endpoints</li>
+                        <li>Dynamic user agent rotation with 50+ signatures</li>
                         <li>Request throttling and randomized delays</li>
                         <li>Headless browser emulation for JS-heavy sites</li>
                         <li>Legal compliance features to respect terms</li>
@@ -1170,14 +1214,12 @@
         <span>Website scraped successfully!</span>
     </div>
 
-    <!-- PWA Install Button -->
     <div class="pwa-install-container" id="pwaInstallContainer">
         <button class="pwa-install-btn" id="pwaInstallBtn">
             <i class="fas fa-download"></i>
         </button>
     </div>
     
-    <!-- Install Prompt -->
     <div class="install-prompt" id="installPrompt">
         <div class="install-icon">
             <i class="fas fa-download"></i>
@@ -1191,16 +1233,13 @@
         </button>
     </div>
     
-    <!-- Offline Indicator -->
     <div class="offline-indicator" id="offlineIndicator">
         <i class="fas fa-wifi-slash"></i>
         <span>You are currently offline</span>
     </div>
     
-    <!-- Toast notification -->
     <div class="toast" id="toast"></div>
     
-    <!-- Export loading indicator -->
     <div class="export-loader" id="exportLoader">
         <div class="loader-spinner"></div>
         <p>Generating report...</p>
@@ -1244,14 +1283,19 @@
         const userAgentRotation = document.getElementById('userAgentRotation');
         const requestThrottling = document.getElementById('requestThrottling');
         const headlessEmulation = document.getElementById('headlessEmulation');
+        const proxyStatusText = document.getElementById('proxyStatusText');
+        const proxyStatusDot = document.getElementById('proxyStatusDot');
+        const proxyHealth = document.getElementById('proxyHealth');
         
         // Initialize app
         const STORAGE_KEY = 'KNOWN_DB';
+        const PROXY_HEALTH_KEY = 'PROXY_HEALTH';
         let db = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        let proxyHealthData = JSON.parse(localStorage.getItem(PROXY_HEALTH_KEY)) || {};
         let currentEntry = null;
         let deferredPrompt; // For PWA installation
         
-        // Enhanced proxy list with 20+ reliable CORS proxies
+        // Enhanced proxy list with 30+ reliable CORS proxies
         const PROXY_LIST = [
             'https://api.allorigins.win/raw?url=',
             'https://corsproxy.io/?',
@@ -1274,10 +1318,24 @@
             'https://cors.andrux.net/',
             'https://api.cors.workers.dev?url=',
             'https://cors.snek.workers.dev?url=',
-            'https://proxy.tokyo.workers.dev/?url='
+            'https://proxy.tokyo.workers.dev/?url=',
+            'https://cors.5t5.fun/?url=',
+            'https://cors.488848.xyz/?url=',
+            'https://cors.488848.xyz/',
+            'https://corsproxy.fly.dev/?url=',
+            'https://corsproxy.io/',
+            'https://api.allorigins.win/raw?url=',
+            'https://cors-anywhere-5.herokuapp.com/',
+            'https://cors-anywhere-6.herokuapp.com/',
+            'https://cors-anywhere-7.herokuapp.com/',
+            'https://cors-anywhere-8.herokuapp.com/',
+            'https://cors-anywhere-9.herokuapp.com/',
+            'https://cors-anywhere-10.herokuapp.com/',
+            'https://cors-anywhere-11.herokuapp.com/',
+            'https://cors-anywhere-12.herokuapp.com/'
         ];
         
-        // Enhanced user agents with 30+ browser signatures
+        // Enhanced user agents with 50+ browser signatures
         const USER_AGENTS = [
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15',
@@ -1308,8 +1366,41 @@
             'Mozilla/5.0 (Linux; Android 14; SM-X700) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Safari/605.1.15',
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.46'
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.46',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (Linux; Android 14; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15',
+            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0',
+            'Mozilla/5.0 (Linux; Android 14; SM-F946B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (iPad; CPU OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (Linux; Android 14; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Safari/605.1.15',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1'
         ];
+        
+        // Initialize proxy health data
+        function initProxyHealth() {
+            PROXY_LIST.forEach(proxy => {
+                if (!proxyHealthData[proxy]) {
+                    proxyHealthData[proxy] = {
+                        success: 0,
+                        failures: 0,
+                        lastUsed: 0,
+                        cooldown: 0
+                    };
+                }
+            });
+            updateProxyHealthUI();
+        }
         
         // Show notification
         function showNotification(message, type) {
@@ -1527,6 +1618,106 @@
             });
         }
         
+        // Update proxy health UI
+        function updateProxyHealthUI() {
+            // Calculate overall health
+            let workingProxies = 0;
+            let totalProxies = PROXY_LIST.length;
+            
+            PROXY_LIST.forEach(proxy => {
+                const health = proxyHealthData[proxy];
+                if (health && health.success > health.failures && health.cooldown < Date.now()) {
+                    workingProxies++;
+                }
+            });
+            
+            const healthPercentage = Math.round((workingProxies / totalProxies) * 100);
+            
+            // Update status text and dot
+            if (healthPercentage > 75) {
+                proxyStatusText.textContent = `Proxy health: Excellent (${workingProxies}/${totalProxies})`;
+                proxyStatusDot.style.background = 'var(--success)';
+            } else if (healthPercentage > 50) {
+                proxyStatusText.textContent = `Proxy health: Good (${workingProxies}/${totalProxies})`;
+                proxyStatusDot.style.background = 'var(--success)';
+            } else if (healthPercentage > 25) {
+                proxyStatusText.textContent = `Proxy health: Fair (${workingProxies}/${totalProxies})`;
+                proxyStatusDot.style.background = 'var(--warning)';
+            } else {
+                proxyStatusText.textContent = `Proxy health: Poor (${workingProxies}/${totalProxies})`;
+                proxyStatusDot.style.background = 'var(--error)';
+            }
+            
+            // Update health dots
+            proxyHealth.innerHTML = '';
+            PROXY_LIST.forEach(proxy => {
+                const health = proxyHealthData[proxy];
+                const dot = document.createElement('div');
+                dot.className = 'health-dot';
+                
+                if (health.cooldown > Date.now()) {
+                    dot.classList.add('error');
+                } else if (health.failures > 2) {
+                    dot.classList.add('warning');
+                } else {
+                    dot.classList.add('success');
+                }
+                
+                proxyHealth.appendChild(dot);
+            });
+            
+            // Save health data
+            localStorage.setItem(PROXY_HEALTH_KEY, JSON.stringify(proxyHealthData));
+        }
+        
+        // Get a healthy proxy
+        function getHealthyProxy() {
+            // Filter out proxies in cooldown
+            const availableProxies = PROXY_LIST.filter(proxy => {
+                const health = proxyHealthData[proxy];
+                return health.cooldown < Date.now();
+            });
+            
+            // Sort by success rate
+            availableProxies.sort((a, b) => {
+                const healthA = proxyHealthData[a];
+                const healthB = proxyHealthData[b];
+                const scoreA = healthA.success - healthA.failures;
+                const scoreB = healthB.success - healthB.failures;
+                return scoreB - scoreA;
+            });
+            
+            // Return the best available proxy
+            return availableProxies[0] || '';
+        }
+        
+        // Mark proxy as failed
+        function markProxyFailed(proxy) {
+            if (!proxy || !proxyHealthData[proxy]) return;
+            
+            const health = proxyHealthData[proxy];
+            health.failures++;
+            health.cooldown = Date.now() + (30 * 1000 * health.failures); // Exponential cooldown
+            
+            updateProxyHealthUI();
+        }
+        
+        // Mark proxy as successful
+        function markProxySuccess(proxy) {
+            if (!proxy || !proxyHealthData[proxy]) return;
+            
+            const health = proxyHealthData[proxy];
+            health.success++;
+            health.lastUsed = Date.now();
+            
+            // Reset cooldown if it was set
+            if (health.cooldown > Date.now()) {
+                health.cooldown = 0;
+            }
+            
+            updateProxyHealthUI();
+        }
+        
         // Advanced scraping with proxy rotation, headers, and retries
         async function scrapeWebsite(url) {
             statusText.textContent = `Scraping ${url}...`;
@@ -1655,33 +1846,30 @@
         
         // Advanced scraping with proxy rotation, custom headers, and retries
         async function fetchWithAdvancedScraping(url) {
-            const MAX_RETRIES = 5;
+            const MAX_RETRIES = 3;
             let retries = 0;
             let response;
             
-            // Randomly shuffle proxies
-            const shuffledProxies = [...PROXY_LIST].sort(() => Math.random() - 0.5);
-            
             while (retries < MAX_RETRIES) {
                 try {
-                    // Apply bypass settings
-                    const useProxy = proxyRotation.checked;
-                    const useUserAgent = userAgentRotation.checked;
-                    const useThrottling = requestThrottling.checked;
+                    // Get a healthy proxy
+                    const proxy = proxyRotation.checked ? getHealthyProxy() : '';
+                    const userAgent = userAgentRotation.checked ? 
+                        USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)] : 
+                        USER_AGENTS[0];
                     
                     // Add random delay if throttling is enabled
-                    if (useThrottling) {
+                    if (requestThrottling.checked) {
                         const delay = Math.floor(Math.random() * 2000) + 500; // 0.5-2.5s delay
                         await new Promise(resolve => setTimeout(resolve, delay));
                     }
                     
-                    const proxy = useProxy ? shuffledProxies[retries % shuffledProxies.length] : '';
-                    const userAgent = useUserAgent ? USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)] : USER_AGENTS[0];
-                    
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
                     
-                    response = await fetch(proxy + encodeURIComponent(url), {
+                    const targetUrl = proxy ? (proxy + encodeURIComponent(url)) : url;
+                    
+                    response = await fetch(targetUrl, {
                         headers: {
                             'User-Agent': userAgent,
                             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -1703,10 +1891,20 @@
                         throw new Error(`Proxy error: ${response.status}`);
                     }
                     
+                    // Mark proxy as successful
+                    if (proxy) {
+                        markProxySuccess(proxy);
+                    }
+                    
                     return await response.text();
                 } catch (error) {
                     retries++;
                     console.log(`Attempt ${retries} failed, retrying...`, error);
+                    
+                    // Mark proxy as failed
+                    if (proxy) {
+                        markProxyFailed(proxy);
+                    }
                     
                     // Exponential backoff
                     await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retries)));
@@ -1952,6 +2150,7 @@
         });
         
         // Initialize the app
+        initProxyHealth();
         renderHistory();
         updateItemCount();
         

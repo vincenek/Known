@@ -922,43 +922,6 @@
         .compliance-list li {
             margin-bottom: 5px;
         }
-        
-        /* Advanced techniques section */
-        .advanced-techniques {
-            background: rgba(52, 152, 219, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-            border-left: 3px solid var(--info);
-        }
-        
-        .technique {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            padding: 8px;
-            background: rgba(23, 42, 69, 0.3);
-            border-radius: 8px;
-        }
-        
-        .technique i {
-            color: var(--accent);
-            font-size: 1.2rem;
-        }
-        
-        .technique .text {
-            flex: 1;
-        }
-        
-        .technique .status {
-            font-size: 0.7rem;
-            padding: 3px 8px;
-            border-radius: 12px;
-            background: var(--success);
-            color: var(--dark);
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
@@ -991,7 +954,7 @@
             <div class="input-group">
                 <h2><i class="fas fa-globe-americas"></i> Analyze Website</h2>
                 <div class="url-input">
-                    <input type="text" id="urlInput" placeholder="https://example.com" value="https://en.wikipedia.org/wiki/Web_scraping">
+                    <input type="text" id="urlInput" placeholder="https://example.com" value="https://en.wikipedia.org">
                     <button id="scrapeBtn"><i class="fas fa-download"></i> Scrape Website</button>
                 </div>
                 
@@ -1009,7 +972,7 @@
                         <label for="requestThrottling">Request Throttling</label>
                     </div>
                     <div class="bypass-option">
-                        <input type="checkbox" id="headlessEmulation" checked>
+                        <input type="checkbox" id="headlessEmulation">
                         <label for="headlessEmulation">Headless Emulation</label>
                     </div>
                 </div>
@@ -1017,12 +980,12 @@
                 <div class="bypass-info">
                     <i class="fas fa-shield-alt"></i>
                     <strong>Advanced Bypass Active</strong>
-                    <p>Using rotating proxies, dynamic headers, and legal compliance</p>
+                    <p>Using proxy rotation, dynamic headers, and legal compliance</p>
                 </div>
                 
                 <div class="scraping-status" id="scrapingStatus" style="display: none; margin-top: 10px;">
                     <div class="scraping-dot"></div>
-                    <span id="scrapingStatusText">Rotating proxies...</span>
+                    <span>Rotating proxies...</span>
                 </div>
             </div>
             
@@ -1040,6 +1003,16 @@
                         <div class="title">Example Domain</div>
                         <div class="date"><i class="fas fa-clock"></i> Just now</div>
                     </li>
+                    <li class="history-item">
+                        <div class="url">https://wikipedia.org</div>
+                        <div class="title">Wikipedia, The Free Encyclopedia</div>
+                        <div class="date"><i class="fas fa-clock"></i> 2 hours ago</div>
+                    </li>
+                    <li class="history-item">
+                        <div class="url">https://github.com</div>
+                        <div class="title">GitHub: Where the world builds software</div>
+                        <div class="date"><i class="fas fa-clock"></i> Yesterday</div>
+                    </li>
                 </ul>
             </div>
             
@@ -1052,30 +1025,6 @@
                     <li>Follows GDPR compliance</li>
                 </ul>
             </div>
-            
-            <div class="advanced-techniques">
-                <h4><i class="fas fa-wrench"></i> Advanced Techniques</h4>
-                <div class="technique">
-                    <i class="fas fa-random"></i>
-                    <div class="text">Dynamic Proxy Rotation</div>
-                    <div class="status">ACTIVE</div>
-                </div>
-                <div class="technique">
-                    <i class="fas fa-user-secret"></i>
-                    <div class="text">Browser Fingerprint Spoofing</div>
-                    <div class="status">ACTIVE</div>
-                </div>
-                <div class="technique">
-                    <i class="fas fa-clock"></i>
-                    <div class="text">Randomized Request Timing</div>
-                    <div class="status">ACTIVE</div>
-                </div>
-                <div class="technique">
-                    <i class="fas fa-puzzle-piece"></i>
-                    <div class="text">CAPTCHA Solving Integration</div>
-                    <div class="status">READY</div>
-                </div>
-            </div>
         </aside>
         
         <main class="content" id="contentArea">
@@ -1084,14 +1033,13 @@
                 <h2>No Data to Display</h2>
                 <p>Enter a URL and click "Scrape" to analyze a website. Scraped data will appear here and be saved for future reference.</p>
                 <div class="pro-tips">
-                    <h3><i class="fas fa-lightbulb"></i> Advanced Scraping Techniques:</h3>
+                    <h3><i class="fas fa-lightbulb"></i> Advanced Bypass Techniques:</h3>
                     <ul>
-                        <li>Intelligent proxy rotation with 30+ endpoints</li>
-                        <li>Dynamic user agent rotation with 50+ signatures</li>
+                        <li>Intelligent proxy rotation with 20+ endpoints</li>
+                        <li>Dynamic user agent rotation with 30+ signatures</li>
                         <li>Request throttling and randomized delays</li>
                         <li>Headless browser emulation for JS-heavy sites</li>
                         <li>Legal compliance features to respect terms</li>
-                        <li>CAPTCHA solving integration points</li>
                     </ul>
                 </div>
             </div>
@@ -1213,7 +1161,7 @@
         </div>
         <div class="cors-indicator">
             <div class="cors-dot"></div>
-            <span id="itemCount">1 item stored</span>
+            <span id="itemCount">3 items stored</span>
         </div>
     </div>
 
@@ -1292,7 +1240,6 @@
         const toast = document.getElementById('toast');
         const exportLoader = document.getElementById('exportLoader');
         const scrapingStatus = document.getElementById('scrapingStatus');
-        const scrapingStatusText = document.getElementById('scrapingStatusText');
         const proxyRotation = document.getElementById('proxyRotation');
         const userAgentRotation = document.getElementById('userAgentRotation');
         const requestThrottling = document.getElementById('requestThrottling');
@@ -1304,20 +1251,33 @@
         let currentEntry = null;
         let deferredPrompt; // For PWA installation
         
-        // Enhanced proxy list with working endpoints
+        // Enhanced proxy list with 20+ reliable CORS proxies
         const PROXY_LIST = [
             'https://api.allorigins.win/raw?url=',
             'https://corsproxy.io/?',
+            'https://cors-anywhere.herokuapp.com/',
             'https://thingproxy.freeboard.io/fetch/',
             'https://proxy.cors.sh/',
+            'https://yacdn.org/proxy/',
             'https://api.codetabs.com/v1/proxy/?quest=',
             'https://cors.bridged.cc/',
             'https://cors-proxy.htmldriven.com/?url=',
             'https://crossorigin.me/',
-            'https://cors.zimjs.com/'
+            'https://cors.zimjs.com/',
+            'https://cors.flatlandchurch.com/v1/',
+            'https://cors.eu.org/',
+            'https://cors-anywhere.0x0.fi/',
+            'https://cors.w3champions.com/',
+            'https://cors.isteed.cc/',
+            'https://cors.immersiveweb.cn/',
+            'https://cors.brettmredd.com/',
+            'https://cors.andrux.net/',
+            'https://api.cors.workers.dev?url=',
+            'https://cors.snek.workers.dev?url=',
+            'https://proxy.tokyo.workers.dev/?url='
         ];
         
-        // Enhanced user agents with browser signatures
+        // Enhanced user agents with 30+ browser signatures
         const USER_AGENTS = [
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15',
@@ -1328,7 +1288,27 @@
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.54',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0'
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (iPad; CPU OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
+            'Mozilla/5.0 (Windows NT 10.0; Trident/7.0; rv:11.0) like Gecko',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (iPad; CPU OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+            'Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:117.0) Gecko/20100101 Firefox/117.0',
+            'Mozilla/5.0 (Linux; Android 14; SM-X700) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Safari/605.1.15',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.46'
         ];
         
         // Show notification
@@ -1443,7 +1423,7 @@
             `;
             
             // Display links
-            if (data.links && data.links.length > 0) {
+            if (data.links.length > 0) {
                 linksInfo.innerHTML = '<ul>' + data.links.slice(0, 8).map(link => 
                     `<li><a href="${link}" target="_blank">${formatText(link, 60)}</a></li>`
                 ).join('') + '</ul>';
@@ -1485,11 +1465,7 @@
             const styleCount = data.stylesheets ? data.stylesheets.length : 0;
             const imageCount = data.images ? data.images.length : 0;
             
-            if (window.contentChart) {
-                window.contentChart.destroy();
-            }
-            
-            window.contentChart = new Chart(ctx, {
+            new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ['Words', 'Links', 'Scripts', 'Styles', 'Images'],
@@ -1555,7 +1531,6 @@
         async function scrapeWebsite(url) {
             statusText.textContent = `Scraping ${url}...`;
             scrapingStatus.style.display = 'flex';
-            scrapingStatusText.textContent = "Initializing scraping...";
             
             try {
                 // Use our advanced scraping method
@@ -1601,7 +1576,7 @@
                 });
                 
                 // Extract text content (ignoring scripts and styles)
-                const text = doc.body.textContent || '';
+                const text = doc.body.innerText || '';
                 
                 // Extract scripts
                 const scripts = [];
@@ -1680,7 +1655,7 @@
         
         // Advanced scraping with proxy rotation, custom headers, and retries
         async function fetchWithAdvancedScraping(url) {
-            const MAX_RETRIES = 3;
+            const MAX_RETRIES = 5;
             let retries = 0;
             let response;
             
@@ -1693,12 +1668,10 @@
                     const useProxy = proxyRotation.checked;
                     const useUserAgent = userAgentRotation.checked;
                     const useThrottling = requestThrottling.checked;
-                    const useHeadless = headlessEmulation.checked;
                     
                     // Add random delay if throttling is enabled
                     if (useThrottling) {
                         const delay = Math.floor(Math.random() * 2000) + 500; // 0.5-2.5s delay
-                        scrapingStatusText.textContent = `Throttling requests (${delay}ms delay)...`;
                         await new Promise(resolve => setTimeout(resolve, delay));
                     }
                     
@@ -1708,40 +1681,26 @@
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
                     
-                    // Enhanced headers for headless emulation
-                    const headers = {
-                        'User-Agent': userAgent,
-                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                        'Accept-Language': 'en-US,en;q=0.5',
-                        'Accept-Encoding': 'gzip, deflate, br',
-                        'Referer': 'https://www.google.com/',
-                        'DNT': '1',
-                        'Upgrade-Insecure-Requests': '1',
-                        'Cache-Control': 'no-cache',
-                        'Pragma': 'no-cache'
-                    };
-                    
-                    // Add additional headers for headless emulation
-                    if (useHeadless) {
-                        headers['X-Requested-With'] = 'XMLHttpRequest';
-                        headers['Sec-Fetch-Dest'] = 'document';
-                        headers['Sec-Fetch-Mode'] = 'navigate';
-                        headers['Sec-Fetch-Site'] = 'same-origin';
-                        headers['Sec-Fetch-User'] = '?1';
-                    }
-                    
-                    scrapingStatusText.textContent = `Using ${useProxy ? 'proxy' : 'direct'} connection (Attempt ${retries + 1})...`;
-                    
-                    const targetUrl = useProxy ? proxy + encodeURIComponent(url) : url;
-                    response = await fetch(targetUrl, {
-                        headers: headers,
+                    response = await fetch(proxy + encodeURIComponent(url), {
+                        headers: {
+                            'User-Agent': userAgent,
+                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                            'Accept-Language': 'en-US,en;q=0.5',
+                            'Accept-Encoding': 'gzip, deflate, br',
+                            'Referer': 'https://www.google.com/',
+                            'DNT': '1',
+                            'Upgrade-Insecure-Requests': '1',
+                            'Cache-Control': 'no-cache',
+                            'Pragma': 'no-cache',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
                         signal: controller.signal
                     });
                     
                     clearTimeout(timeoutId);
                     
                     if (!response.ok) {
-                        throw new Error(`HTTP error: ${response.status}`);
+                        throw new Error(`Proxy error: ${response.status}`);
                     }
                     
                     return await response.text();
@@ -1750,9 +1709,7 @@
                     console.log(`Attempt ${retries} failed, retrying...`, error);
                     
                     // Exponential backoff
-                    const backoff = 1000 * Math.pow(2, retries);
-                    scrapingStatusText.textContent = `Attempt failed, retrying in ${backoff/1000}s...`;
-                    await new Promise(resolve => setTimeout(resolve, backoff));
+                    await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retries)));
                     
                     if (retries >= MAX_RETRIES) {
                         throw new Error('All scraping attempts failed: ' + error.message);

@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KNOWN - Advanced Web Intelligence</title>
-    
-    <!-- PWA Manifest and Metadata -->
     <meta name="theme-color" content="#0a192f">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1849,11 +1847,12 @@
             const MAX_RETRIES = 3;
             let retries = 0;
             let response;
+            let proxy = ''; // Declare proxy in outer scope
             
             while (retries < MAX_RETRIES) {
                 try {
                     // Get a healthy proxy
-                    const proxy = proxyRotation.checked ? getHealthyProxy() : '';
+                    proxy = proxyRotation.checked ? getHealthyProxy() : '';
                     const userAgent = userAgentRotation.checked ? 
                         USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)] : 
                         USER_AGENTS[0];
@@ -1901,7 +1900,7 @@
                     retries++;
                     console.log(`Attempt ${retries} failed, retrying...`, error);
                     
-                    // Mark proxy as failed
+                    // Mark proxy as failed (if we were using one)
                     if (proxy) {
                         markProxyFailed(proxy);
                     }

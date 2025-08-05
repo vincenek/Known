@@ -991,7 +991,7 @@
             <div class="input-group">
                 <h2><i class="fas fa-globe-americas"></i> Analyze Website</h2>
                 <div class="url-input">
-                    <input type="text" id="urlInput" placeholder="https://example.com" value="https://en.wikipedia.org">
+                    <input type="text" id="urlInput" placeholder="https://example.com" value="https://en.wikipedia.org/wiki/Web_scraping">
                     <button id="scrapeBtn"><i class="fas fa-download"></i> Scrape Website</button>
                 </div>
                 
@@ -1022,7 +1022,7 @@
                 
                 <div class="scraping-status" id="scrapingStatus" style="display: none; margin-top: 10px;">
                     <div class="scraping-dot"></div>
-                    <span>Rotating proxies...</span>
+                    <span id="scrapingStatusText">Rotating proxies...</span>
                 </div>
             </div>
             
@@ -1039,16 +1039,6 @@
                         <div class="url">https://example.com</div>
                         <div class="title">Example Domain</div>
                         <div class="date"><i class="fas fa-clock"></i> Just now</div>
-                    </li>
-                    <li class="history-item">
-                        <div class="url">https://wikipedia.org</div>
-                        <div class="title">Wikipedia, The Free Encyclopedia</div>
-                        <div class="date"><i class="fas fa-clock"></i> 2 hours ago</div>
-                    </li>
-                    <li class="history-item">
-                        <div class="url">https://github.com</div>
-                        <div class="title">GitHub: Where the world builds software</div>
-                        <div class="date"><i class="fas fa-clock"></i> Yesterday</div>
                     </li>
                 </ul>
             </div>
@@ -1223,7 +1213,7 @@
         </div>
         <div class="cors-indicator">
             <div class="cors-dot"></div>
-            <span id="itemCount">3 items stored</span>
+            <span id="itemCount">1 item stored</span>
         </div>
     </div>
 
@@ -1302,6 +1292,7 @@
         const toast = document.getElementById('toast');
         const exportLoader = document.getElementById('exportLoader');
         const scrapingStatus = document.getElementById('scrapingStatus');
+        const scrapingStatusText = document.getElementById('scrapingStatusText');
         const proxyRotation = document.getElementById('proxyRotation');
         const userAgentRotation = document.getElementById('userAgentRotation');
         const requestThrottling = document.getElementById('requestThrottling');
@@ -1313,41 +1304,20 @@
         let currentEntry = null;
         let deferredPrompt; // For PWA installation
         
-        // Enhanced proxy list with 30+ endpoints
+        // Enhanced proxy list with working endpoints
         const PROXY_LIST = [
             'https://api.allorigins.win/raw?url=',
             'https://corsproxy.io/?',
-            'https://cors-anywhere.herokuapp.com/',
             'https://thingproxy.freeboard.io/fetch/',
             'https://proxy.cors.sh/',
-            'https://yacdn.org/proxy/',
             'https://api.codetabs.com/v1/proxy/?quest=',
             'https://cors.bridged.cc/',
             'https://cors-proxy.htmldriven.com/?url=',
             'https://crossorigin.me/',
-            'https://cors.zimjs.com/',
-            'https://cors.flatlandchurch.com/v1/',
-            'https://cors.eu.org/',
-            'https://cors-anywhere.0x0.fi/',
-            'https://cors.w3champions.com/',
-            'https://cors.isteed.cc/',
-            'https://cors.immersiveweb.cn/',
-            'https://cors.brettmredd.com/',
-            'https://cors.andrux.net/',
-            'https://api.cors.workers.dev?url=',
-            'https://cors.snek.workers.dev?url=',
-            'https://proxy.tokyo.workers.dev/?url=',
-            'https://cors.grassfed.dev/?url=',
-            'https://cors.haas.workers.dev/?url=',
-            'https://cors-proxy-1.herokuapp.com/',
-            'https://cors-proxy-2.herokuapp.com/',
-            'https://cors-proxy-3.herokuapp.com/',
-            'https://cors-proxy-4.herokuapp.com/',
-            'https://cors-proxy-5.herokuapp.com/',
-            'https://cors-proxy-6.herokuapp.com/'
+            'https://cors.zimjs.com/'
         ];
         
-        // Enhanced user agents with 50+ browser signatures
+        // Enhanced user agents with browser signatures
         const USER_AGENTS = [
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15',
@@ -1358,48 +1328,7 @@
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.54',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0',
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (iPad; CPU OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36',
-            'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
-            'Mozilla/5.0 (Windows NT 10.0; Trident/7.0; rv:11.0) like Gecko',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0',
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (iPad; CPU OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Mobile Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
-            'Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:117.0) Gecko/20100101 Firefox/117.0',
-            'Mozilla/5.0 (Linux; Android 14; SM-X700) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Safari/605.1.15',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.46',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0',
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (Linux; Android 13; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Mobile Safari/537.36',
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/119.0',
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (Linux; Android 14; SM-S901B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Mobile Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.2151.44',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Safari/605.1.15',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (iPad; CPU OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.2210.91',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0'
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0'
         ];
         
         // Show notification
@@ -1514,7 +1443,7 @@
             `;
             
             // Display links
-            if (data.links.length > 0) {
+            if (data.links && data.links.length > 0) {
                 linksInfo.innerHTML = '<ul>' + data.links.slice(0, 8).map(link => 
                     `<li><a href="${link}" target="_blank">${formatText(link, 60)}</a></li>`
                 ).join('') + '</ul>';
@@ -1556,7 +1485,11 @@
             const styleCount = data.stylesheets ? data.stylesheets.length : 0;
             const imageCount = data.images ? data.images.length : 0;
             
-            new Chart(ctx, {
+            if (window.contentChart) {
+                window.contentChart.destroy();
+            }
+            
+            window.contentChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ['Words', 'Links', 'Scripts', 'Styles', 'Images'],
@@ -1622,6 +1555,7 @@
         async function scrapeWebsite(url) {
             statusText.textContent = `Scraping ${url}...`;
             scrapingStatus.style.display = 'flex';
+            scrapingStatusText.textContent = "Initializing scraping...";
             
             try {
                 // Use our advanced scraping method
@@ -1667,7 +1601,7 @@
                 });
                 
                 // Extract text content (ignoring scripts and styles)
-                const text = doc.body.innerText || '';
+                const text = doc.body.textContent || '';
                 
                 // Extract scripts
                 const scripts = [];
@@ -1746,7 +1680,7 @@
         
         // Advanced scraping with proxy rotation, custom headers, and retries
         async function fetchWithAdvancedScraping(url) {
-            const MAX_RETRIES = 5;
+            const MAX_RETRIES = 3;
             let retries = 0;
             let response;
             
@@ -1764,6 +1698,7 @@
                     // Add random delay if throttling is enabled
                     if (useThrottling) {
                         const delay = Math.floor(Math.random() * 2000) + 500; // 0.5-2.5s delay
+                        scrapingStatusText.textContent = `Throttling requests (${delay}ms delay)...`;
                         await new Promise(resolve => setTimeout(resolve, delay));
                     }
                     
@@ -1795,7 +1730,10 @@
                         headers['Sec-Fetch-User'] = '?1';
                     }
                     
-                    response = await fetch(proxy + encodeURIComponent(url), {
+                    scrapingStatusText.textContent = `Using ${useProxy ? 'proxy' : 'direct'} connection (Attempt ${retries + 1})...`;
+                    
+                    const targetUrl = useProxy ? proxy + encodeURIComponent(url) : url;
+                    response = await fetch(targetUrl, {
                         headers: headers,
                         signal: controller.signal
                     });
@@ -1803,7 +1741,7 @@
                     clearTimeout(timeoutId);
                     
                     if (!response.ok) {
-                        throw new Error(`Proxy error: ${response.status}`);
+                        throw new Error(`HTTP error: ${response.status}`);
                     }
                     
                     return await response.text();
@@ -1812,7 +1750,9 @@
                     console.log(`Attempt ${retries} failed, retrying...`, error);
                     
                     // Exponential backoff
-                    await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retries)));
+                    const backoff = 1000 * Math.pow(2, retries);
+                    scrapingStatusText.textContent = `Attempt failed, retrying in ${backoff/1000}s...`;
+                    await new Promise(resolve => setTimeout(resolve, backoff));
                     
                     if (retries >= MAX_RETRIES) {
                         throw new Error('All scraping attempts failed: ' + error.message);

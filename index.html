@@ -1293,47 +1293,20 @@
         let currentEntry = null;
         let deferredPrompt; // For PWA installation
         
-        // Enhanced proxy list with 30+ reliable CORS proxies
+        // Updated proxy list with reliable CORS proxies
         const PROXY_LIST = [
             'https://api.allorigins.win/raw?url=',
             'https://corsproxy.io/?',
-            'https://cors-anywhere.herokuapp.com/',
             'https://thingproxy.freeboard.io/fetch/',
             'https://proxy.cors.sh/',
-            'https://yacdn.org/proxy/',
             'https://api.codetabs.com/v1/proxy/?quest=',
             'https://cors.bridged.cc/',
-            'https://cors-proxy.htmldriven.com/?url=',
-            'https://crossorigin.me/',
-            'https://cors.zimjs.com/',
-            'https://cors.flatlandchurch.com/v1/',
-            'https://cors.eu.org/',
-            'https://cors-anywhere.0x0.fi/',
-            'https://cors.w3champions.com/',
-            'https://cors.isteed.cc/',
-            'https://cors.immersiveweb.cn/',
-            'https://cors.brettmredd.com/',
-            'https://cors.andrux.net/',
-            'https://api.cors.workers.dev?url=',
-            'https://cors.snek.workers.dev?url=',
-            'https://proxy.tokyo.workers.dev/?url=',
             'https://cors.5t5.fun/?url=',
             'https://cors.488848.xyz/?url=',
-            'https://cors.488848.xyz/',
-            'https://corsproxy.fly.dev/?url=',
-            'https://corsproxy.io/',
-            'https://api.allorigins.win/raw?url=',
-            'https://cors-anywhere-5.herokuapp.com/',
-            'https://cors-anywhere-6.herokuapp.com/',
-            'https://cors-anywhere-7.herokuapp.com/',
-            'https://cors-anywhere-8.herokuapp.com/',
-            'https://cors-anywhere-9.herokuapp.com/',
-            'https://cors-anywhere-10.herokuapp.com/',
-            'https://cors-anywhere-11.herokuapp.com/',
-            'https://cors-anywhere-12.herokuapp.com/'
+            'https://corsproxy.fly.dev/?url='
         ];
         
-        // Enhanced user agents with 50+ browser signatures
+        // User agents with 50+ browser signatures
         const USER_AGENTS = [
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15',

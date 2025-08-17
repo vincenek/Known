@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KNOWN WEB SCRAPER</title>
-    <meta name="theme-color" content="#0a192f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBmaWxsPSIjMGExOTJmIj48cGF0aCBkPSJNMTg0IDBjMzAuOSAwIDU2IDI1LjEgNTYgNTZ2Ni40YzAgMTMuMy0xMC43IDI0LTI0IDI0Yy0zLjQgMC02LjYtLjctOS42LTJjLTcuNCAxMC45LTE5LjIgMTgtMzIuNCAxOHMtMjUtNy4xLTMyLjQgMThjLTMgLjktNi4yIDEuNC05LjYgMS40Yy0xMy4zIDAtMjQgMTAuNy0yNCAyNFY1NmMwLTMwLjkgMjUuMS01NiA1Ni01NnptNTYgMTIwYzAtMTMuMyAxMC43LTI0IDI0LTI0YzMuNCAwIDYuNi43IDkuNiAyYzcuNC0xMC45IDE5LjItMTggMzIuNC0xOHMyNSA3LjEgMzIuNCAxOGMzLS45IDYuMi0xLjQgOS42LTEuNGMxMy4zIDAgMjQgMTAuNyAyNCAyNHY2LjRjMCAzMC45LTI1LjEgNTYtNTYgNTZjLTMwLjkgMC01Ni0yNS4xLTU2LTU2di02LjRjMC0xMy4zIDEwLjctMjQgMjQtMjRjMTMuMyAwIDI0IDEwLjcgMjQgMjR2MjRjMCAzNS4zLTI4LjcgNjQtNjQgNjRIMjI0djY0aDMyYzE3LjcgMCAzMiAxNC4zIDMyIDMydjMyYzAgMTcuNy0xNC4zIDMyLTMyIDMySDE5MmMtMTcuNyAwLTMyLTE0LjMtMzItMzJWMzg0YzAtMTcuNyAxNC4zLTMyIDMyLTMyaDMyVjI4OEgxOTJjLTM1LjMgMC02NC0yOC43LTY0LTY0di0yNGMwLTEzLjMgMTAuNy0yNCAyNC0yNHMyNCAxMC43IDI0IDI0djYuNGMwIDMwLjkgMjUuMSA1NiA1NiA1NmMzMC45IDAgNTYtMjUuMSA1Ni01NnYtNi40YzAtMTMuMy0xMC43LTI0LTI0LTI0Yy0zLjQgMC02LjYuNy05LjYgMmMtNy40LTEwLjktMTkuMi0xOC0zMi40LTE4cy0yNSA3LjEtMzIuNCAxOGMtMy0uOS02LjItMS40LTkuNi0xLjRjLTEzLjMgMC0yNCAxMC43LTI0IDI0djYuNGMwIDMwLjktMjUuMSA1Ni01NiA1NmMtMzA5IDAtNTYtMjUuMS01Ni01NlY1NkMwIDI1LjEgMjUuMSAwIDU2IDBoMTI4YzMwLjkgMCA1NiAyNS4xIDU2IDU2djYuNGMwIDEzLjMtMTAuNyAyNC0yNCAyNGMtMy40IDAtNi42LS43LTkuNi0yYy03LjQgMTAuOS0xOS4yIDE4LTMyLjQgMThzLTI1LTcuMS0zMi40LTE4Yy0zIC45LTYuMiAxLjQtOS42IDEuNGMtMTMuMyAwLTI0LTEwLjctMjQtMjRWNTZjMC0zMC45IDI1LjEtNTYgNTYtNTZoMTI4eiIvPjwvc3ZnPg==">
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlVsdGltYXRlIFNjcmFwZXIiLAogICJzaG9ydF9uYW1lIjogIlNjcmFwZXIiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgInRoZW1lX2NvbG9yIjogIiMwYTE5MmYiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMjBjMWIiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSFpwWlhkQ2IzZzlJakFnTUNBek5UQWdOVEF3SWo0OGMzUjViR1UryUR4d1lYUm9JR1pwYkd3OUluVnliQ2dqWm1sc2RHVnlNUzR3TGpBdU1DQXhNREF1TVRZaVBnMEtQM04yWno0PSIsCiAgICAgICJzaXplcyI6ICIxOTJ4MTkyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01DOXpkbWNpSUhacFpYZENiM2c5SWpBZ01DQXpOVEFnTlRBd0lqNDhjM1I1YkdVK8lEeHdZWFJvSUdacGJHdzlJblZ5YkNnalptbHNkR1Z5TVM0d0xqQXVNQ0F4TURBdU1UWWlQZzBLUDNOMlp6ND0iLAogICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9CiAgXQp9">
-    
+    <!-- Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- iOS Support -->
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
+<meta name="apple-mobile-web-app-status-bar" content="#2563eb">
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#2563eb">
+  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>

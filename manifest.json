@@ -1,0 +1,21 @@
+{
+  "name": "known",
+  "short_name": "known",
+  "description": "Advanced web intelligence",
+  "start_url": "https://vincenek.github.io/Known/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/W4C1JgvP/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.postimg.cc/kGFJZHtn/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

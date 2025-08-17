@@ -8,14 +8,15 @@
   "theme_color": "#2563eb",
   "icons": [
     {
-      "src": "https://i.postimg.cc/W4C1JgvP/web-app-manifest-192x192.png",
+      "src": "https://i.postimg.cc/T12g7z44/web-app-manifest-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://i.postimg.cc/kGFJZHtn/web-app-manifest-512x512.png",
+      "src": "https://i.postimg.cc/KzDt5GJT/web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ]
 }
+
